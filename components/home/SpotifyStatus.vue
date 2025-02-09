@@ -12,12 +12,19 @@ const { status, data: song } = useFetch<any>("/api/spotify", { lazy: true })
 
         <div class="text-sm opacity-75">
             <p>
-                {{ status === "error" ? "Couldn't get the song" : null }}
-                {{ status === "pending" ? "Loading..." : null }}
-                {{ song.isPlaying ? null : "Not playing" }}
-                <NuxtLink v-if="song.isPlaying" :to="song.songUrl">
-                    {{ song.name }} - {{ song.artist[0] }}
-                </NuxtLink>
+                <template v-if="status === 'error'">
+                    Couldn't get the song
+                </template>
+                <template v-else-if="status === 'pending'">
+                    Loading...
+                </template>
+
+                <template v-else-if="song.isPlaying">
+                    <NuxtLink :to="song.songUrl">
+                        {{ song.name }} - {{ song.artist[0] }}
+                    </NuxtLink>
+                </template>
+                <template v-else>Not playing</template>
             </p>
         </div>
 

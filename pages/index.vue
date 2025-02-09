@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Navbar from '~/components/home/Navbar.vue';
+import Navbar from '~/components/layout/Navbar.vue';
 import ArticleCard from '~/components/ArticleCard.vue';
 import { Icon } from '@iconify/vue';
-import SpotifyStatus from '~/components/home/SpotifyStatus.vue';
+import Footer from '~/components/home/Footer.vue';
 
 const links = [
     {
@@ -35,10 +35,8 @@ const links = [
 
 <template>
     <div>
-        <Navbar />
         <section class="relative w-full max-w-4xl mx-auto">
-            <div
-                class="relative mx-auto mt-12 flex max-w-7xl flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+            <div class="mt-12 flex flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
 
                 <div class="text-center space-y-8">
 
@@ -75,6 +73,9 @@ const links = [
                     </div>
                 </div>
             </div>
+
+
+
             <div>
                 <div class="text-center mx-auto text-3xl font-semibold my-12">
                     <h2 class="bg-gradient-to-t from-slate-400 to-slate-800 bg-clip-text text-transparent">Latest
@@ -94,16 +95,8 @@ const links = [
                 </div>
             </div>
 
-
+            <Footer />
         </section>
-        <footer class="mx-auto max-w-4xl  mt-32">
-            <div class="flex justify-between">
-                <SpotifyStatus></SpotifyStatus>
 
-                <div class="opacity-50 text-xs">© 2025 Franciszek Szarek</div>
-            </div>
-
-
-        </footer>
     </div>
 </template>

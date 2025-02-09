@@ -23,7 +23,12 @@ defineProps<{
         </div>
         <div class="flex flex-col transition-transform ease-out group-hover:scale-105 group-hover:translate-x-3">
             <h3 class="text-xl font-semibold">
-                {{ title }}
+                <span class="bg-gradient-to-r from-green-200 to-green-100 bg-[length:0px_10px] bg-left-bottom
+                    bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px]
+                    group-hover:bg-[length:100%_10px]">
+
+                    {{ title }}
+                </span>
             </h3>
             <span class="text-xs text-muted-foreground">{{ date }}</span>
         </div>

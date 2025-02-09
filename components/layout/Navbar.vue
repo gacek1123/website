@@ -13,22 +13,23 @@ import { Icon } from '@iconify/vue'
 </script>
 
 <template>
-    <header className="w-full max-w-4xl mx-auto flex justify-between items-center p-2">
-
+    <header className="w-full max-w-5xl mx-auto flex justify-between items-center p-2">
         <NavigationMenu class="block">
             <NavigationMenuList>
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">Home
-                    </NavigationMenuLink>
+                    <NuxtLink to="/" :class="navigationMenuTriggerStyle()">
+                        Home
+                    </NuxtLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/posts" :class="navigationMenuTriggerStyle()">Blog
-                    </NavigationMenuLink>
+                    <NuxtLink to="/blog" :class="navigationMenuTriggerStyle()">
+                        Blog
+                    </NuxtLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                    <NavigationMenuLink href="/work" :class="navigationMenuTriggerStyle()">
+                    <NuxtLink to="/work" :class="navigationMenuTriggerStyle()">
                         Work
-                    </NavigationMenuLink>
+                    </NuxtLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
