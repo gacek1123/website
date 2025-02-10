@@ -82,7 +82,7 @@ const links = [
                         Articles</h2>
                 </div>
 
-                <div class="grid grid-cols-2 gap-7">
+                <div class="grid sm:grid-cols-2 gap-7 px-4">
                     <ArticleCard title="Artykuł"
                         image="https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg"
                         path="/" date="Aug 22, 2023" />

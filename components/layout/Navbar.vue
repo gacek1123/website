@@ -10,10 +10,23 @@ import {
 } from '@/components/ui/navigation-menu'
 import { Icon } from '@iconify/vue'
 
+const pages = [
+    {
+        name: "Home",
+        link: "/"
+    },
+    {
+        name: "Blog",
+        link: "/blog"
+    },
+    {
+        name: ""
+    }
+]
 </script>
 
 <template>
-    <header className="w-full max-w-5xl mx-auto flex justify-between items-center p-2">
+    <header className="w-full max-w-4xl mx-auto flex justify-between items-center p-2">
         <NavigationMenu class="block">
             <NavigationMenuList>
                 <NavigationMenuItem>

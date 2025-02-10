@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import Input from '~/components/ui/input/Input.vue';
 import { Search } from 'lucide-vue-next'
+
+const { fetchPosts } = usePosts()
+
+const posts = await fetchPosts()
 </script>
 
 <template>
