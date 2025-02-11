@@ -1,19 +1,33 @@
 <script setup lang="ts">
+import { useFormattedDate } from '~/composables/date';
 import { Badge } from './ui/badge';
 
-defineProps<{
+const tagColors = {
+    blue: "rgba(93, 165, 206, 1)",
+    green: "rgba(123, 183, 129, 1)",
+    gray: "rgba(84, 72, 49, 1)",
+}
+
+const props = defineProps<{
     title: string,
     date: string,
     image: string,
     path: string,
+    tags: { name: string, color: string }[]
 }>()
+
+const date = useFormattedDate(props.date)
 </script>
 
 <template>
     <NuxtLink :to="path" :aria-label="title" class="flex cursor-pointer flex-col gap-2 group">
         <div class="relative rounded-md overflow-hidden">
             <div class="absolute z-10 top-2 left-2">
-                <Badge>Programming</Badge>
+                <Badge v-for="tag in tags" class="mr-2"
+                    :style="{ backgroundColor: tag.color in tagColors ? tagColors[tag.color as keyof typeof tagColors] : tagColors['gray'] }">
+                    {{
+                        tag.name
+                    }}</Badge>
             </div>
             <div class="transition-colors duration-200">
                 <NuxtImg width="1536" :alt="`${title} article image`"

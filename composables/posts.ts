@@ -1,18 +1,20 @@
+export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[] }
+
 export const usePosts = () => {
-    const fetchPosts = () => {
-        const { data: posts, error } = useFetch("/api/notion/query-database")
+    const posts = useState<Post[] | undefined>("posts", () => undefined)
 
-        if (error.value) {
-            console.log(error.value)
-            throw createError({
-                ...error.value,
-                message: "Couldn't fetch posts."
-            })
-        }
+    const fetchPosts = async () => {
+        if (posts.value) return { posts: posts.value }
 
+        const { data, error, status } = await useFetch("/api/notion/query-database")
 
-        return posts.value
+        if (!data.value) return { error, status }
+
+        posts.value = data.value
+
+        return { posts, error, status }
     }
 
-    return { fetchPosts }
+
+    return { fetchPosts, posts }
 }

@@ -3,7 +3,7 @@ import SpotifyStatus from '~/components/home/SpotifyStatus.vue';
 </script>
 
 <template>
-    <footer class="mt-32">
+    <footer class="mt-32 mb-10 px-4">
         <div class="flex justify-between">
             <SpotifyStatus />
 

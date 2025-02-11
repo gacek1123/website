@@ -8,6 +8,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
+
 import { Icon } from '@iconify/vue'
 
 const pages = [

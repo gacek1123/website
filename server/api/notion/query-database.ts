@@ -1,5 +1,5 @@
 import { Client, isFullPage, isFullPageOrDatabase } from "@notionhq/client";
-import { DatabaseObjectResponse, PageObjectResponse, } from "@notionhq/client/build/src/api-endpoints";
+import { DatabaseObjectResponse, PageObjectResponse, RichTextItemResponse, } from "@notionhq/client/build/src/api-endpoints";
 
 export default cachedEventHandler(async (event) => {
     const query = getQuery(event as any);
@@ -10,9 +10,10 @@ export default cachedEventHandler(async (event) => {
     });
 
     const size = query.size?.toString();
+    const start_cursor = query.start_cursor?.toString()
+
     const response = await notion.databases.query({
         database_id: process.env.NOTION_POST_DATABASE as string,
-
         filter: {
             property: "Status",
             status: {
@@ -25,27 +26,49 @@ export default cachedEventHandler(async (event) => {
                 direction: "descending"
             }
         ],
+        start_cursor: start_cursor,
         page_size: size ? parseInt(size) : undefined
     });
 
-    return response.results.map((result) => {
-        if (isFullPage(result)) {
-            const { Title, Description, Tags, URL: Url, Published } = result.properties
 
+    return response.results.filter((result) => isFullPage(result)).map((result) => {
+        const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage } = result.properties
 
-            return {
-                title: getProperty(Title, "title")?.[0].plain_text,
-                description: getProperty(Description, "rich_text")?.[0].plain_text,
-                tags: getProperty(Tags, "multi_select"),
-                url: getProperty(Url, "url"),
-                image: getProperty(result.properties["Cover image"], "rich_text")?.[0].plain_text,
-                createdAt: getProperty(Published, "created_time")
-            }
+        return {
+            tags: getProperty(Tags, "multi_select") || [],
+            image: getTextProperty(CoverImage),
+            title: getTextProperty(Title),
+            description: getTextProperty(Description),
+            url: getTextProperty(Url),
+            createdAt: getTextProperty(Published),
         }
-
-
     });
 });
+
+type TextPropertyType = "rich_text" | "title" | "url" | "created_time"
+
+function isText(type: Property["type"]): type is TextPropertyType {
+    const allowedTypes = new Set(["rich_text", "title", "url", "created_time"])
+
+    if (!allowedTypes.has(type)) return false
+
+    return true
+}
+
+function getTextProperty(prop: Property): string {
+
+    if (!isText(prop.type)) return ""
+
+    const res = getProperty(prop, prop.type)
+
+    if (!res) return ""
+
+    if (Array.isArray(res))
+        return res[0].plain_text
+
+
+    return res
+}
 
 type Property = PageObjectResponse["properties"][string]
 

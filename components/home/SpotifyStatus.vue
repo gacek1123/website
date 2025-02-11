@@ -10,7 +10,7 @@ const { status, data: song } = useFetch<any>("/api/spotify", { lazy: true })
     <div class="cursor-pointer flex items-center gap-3">
         <Icon icon="logos:spotify-icon" class="w-5 h-5" />
 
-        <div class="text-sm opacity-75">
+        <div class="text-xs sm:text-sm opacity-75">
             <p>
                 <template v-if="status === 'error'">
                     Couldn't get the song
