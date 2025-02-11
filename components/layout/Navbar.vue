@@ -51,9 +51,7 @@ const pages = [
             <Button variant="outline" class="px-2">
                 <Icon icon="material-symbols:keyboard-command-key" class="h-5 w-5" />
             </Button>
-            <Button>
-                <Icon icon="radix-icons:sun" class="absolute h-[1.2rem] w-[1.2rem] transition-all rotate-0 scale-100" />
-            </Button>
+            <LayoutThemeSwitch></LayoutThemeSwitch>
         </div>
     </header>
 

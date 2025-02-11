@@ -3,9 +3,9 @@ import { useFormattedDate } from '~/composables/date';
 import { Badge } from './ui/badge';
 
 const tagColors = {
-    blue: "rgba(93, 165, 206, 1)",
-    green: "rgba(123, 183, 129, 1)",
-    gray: "rgba(84, 72, 49, 1)",
+    blue: "#0069A8",
+    green: "#008236",
+    gray: "#364153",
 }
 
 const props = defineProps<{
@@ -24,7 +24,7 @@ const date = useFormattedDate(props.date)
         <div class="relative rounded-md overflow-hidden">
             <div class="absolute z-10 top-2 left-2">
                 <Badge v-for="tag in tags" class="mr-2"
-                    :style="{ backgroundColor: tag.color in tagColors ? tagColors[tag.color as keyof typeof tagColors] : tagColors['gray'] }">
+                    :style="{/* backgroundColor: tag.color in tagColors ? tagColors[tag.color as keyof typeof tagColors] : tagColors['gray'] */ }">
                     {{
                         tag.name
                     }}</Badge>
@@ -37,7 +37,7 @@ const date = useFormattedDate(props.date)
         </div>
         <div class="flex flex-col transition-transform ease-out group-hover:scale-105 group-hover:translate-x-3">
             <h3 class="text-xl font-semibold">
-                <span class="bg-gradient-to-r from-green-200 to-green-100 bg-[length:0px_10px] bg-left-bottom
+                <span class="bg-gradient-to-r from-green-200 to-green-100 dark:from-green-900 dark:to-green-600 bg-[length:0px_10px] bg-left-bottom
                     bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px]
                     group-hover:bg-[length:100%_10px]">
 

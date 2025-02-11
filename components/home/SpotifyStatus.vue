@@ -2,8 +2,6 @@
 import { Icon } from "@iconify/vue"
 
 const { status, data: song } = useFetch<any>("/api/spotify", { lazy: true })
-
-
 </script>
 
 <template>
