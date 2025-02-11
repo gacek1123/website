@@ -37,7 +37,7 @@ const date = useFormattedDate(props.date)
         </div>
         <div class="flex flex-col transition-transform ease-out group-hover:scale-105 group-hover:translate-x-3">
             <h3 class="text-xl font-semibold">
-                <span class="bg-gradient-to-r from-green-200 to-green-100 dark:from-green-900 dark:to-green-600 bg-[length:0px_10px] bg-left-bottom
+                <span class="bg-gradient-to-r from-green-200 to-green-100 dark:from-green-900 dark:to-green-800 bg-[length:0px_10px] bg-left-bottom
                     bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px]
                     group-hover:bg-[length:100%_10px]">
 

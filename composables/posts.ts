@@ -4,7 +4,7 @@ export const usePosts = () => {
     const posts = useState<Post[] | undefined>("posts", () => undefined)
 
     const fetchPosts = async () => {
-        if (posts.value) return { posts: posts.value }
+        if (posts.value) return { posts: posts }
 
         const { data, error, status } = await useFetch("/api/notion/query-database")
 

@@ -13,8 +13,9 @@ const { error, status, posts } = await fetchPosts()
 
 const searchText = ref("")
 
+
 const filteredPosts = computed(() => {
-    if (Array.isArray(posts)) return posts.filter((post) =>
+    if (posts?.value) return posts.value.filter((post) =>
         post.title.toLowerCase().includes(searchText.value.toLowerCase())
     )
 

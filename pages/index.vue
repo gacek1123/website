@@ -11,17 +11,17 @@ import {
 const links = [
     {
         icon: "simple-icons:github",
-        link: "",
+        link: "https://github.com/nei7",
         name: "Github"
     },
     {
         icon: "simple-icons:discord",
-        link: "",
+        link: "https://discord.com/users/624981292865552435",
         name: "Discord"
     },
     {
         icon: "simple-icons:steam",
-        link: "",
+        link: "https://steamcommunity.com/profiles/76561199121681262",
         name: "Steam"
     },
     {
@@ -31,7 +31,7 @@ const links = [
     },
     {
         icon: "simple-icons:youtube",
-        link: "",
+        link: "https://www.youtube.com/@nei3765",
         name: "Youtube"
     }
 ]
@@ -40,7 +40,7 @@ const { fetchPosts } = usePosts()
 
 const { error, status, posts } = await fetchPosts()
 
-const latestPosts = computed(() => Array.isArray(posts) ? posts.slice(0, 2) : [])
+const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
 
 </script>
 
@@ -79,16 +79,16 @@ const latestPosts = computed(() => Array.isArray(posts) ? posts.slice(0, 2) : []
                             </span>
                             <span class="bg-green-500/80 relative inline-flex size-3 scale-90 rounded-full"></span>
                         </span>
-                        <span class="text-green-500/80 ml-2 text-sm font-medium">Currently being online</span>
+                        <span class="text-green-500/80 ml-2 text-sm font-medium">Available for new opportunities</span>
 
                     </div>
                     <div class="py-12 mx-auto max-w-max">
                         <ul class="flex items-center justify-center text-sm flex-wrap gap-5 text-muted-foreground">
                             <li v-for="link in links" class="border-b hover:text-foreground transition-colors">
-                                <a class="flex items-center" :href="link.link">
+                                <NuxtLink class="flex items-center" :to="link.link" external target="_blank">
                                     <Icon :icon="link.icon" class="w-[1rem] h-[1rem]" />&nbsp;
                                     {{ link.name }}
-                                </a>
+                                </NuxtLink>
                             </li>
                         </ul>
                     </div>

@@ -21,7 +21,7 @@ const pages = [
         link: "/blog"
     },
     {
-        name: ""
+        name: "Dashboard"
     }
 ]
 </script>
@@ -30,19 +30,9 @@ const pages = [
     <header className="w-full max-w-4xl mx-auto flex justify-between items-center p-2">
         <NavigationMenu class="block">
             <NavigationMenuList>
-                <NavigationMenuItem>
-                    <NuxtLink to="/" :class="navigationMenuTriggerStyle()">
-                        Home
-                    </NuxtLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NuxtLink to="/blog" :class="navigationMenuTriggerStyle()">
-                        Blog
-                    </NuxtLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NuxtLink to="/work" :class="navigationMenuTriggerStyle()">
-                        Work
+                <NavigationMenuItem v-for="item in pages">
+                    <NuxtLink :to="item.link" :class="navigationMenuTriggerStyle()">
+                        {{ item.name }}
                     </NuxtLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
