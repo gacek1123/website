@@ -13,7 +13,8 @@ export default defineNuxtConfig({
   ],
   shiki: {
     bundledLangs: ["yaml", "shell", "python", "py"],
-    bundledThemes: ['material-theme-lighter', 'material-theme-darker'],
+    bundledThemes: ['vitesse-light', 'vitesse-dark'],
+
   },
 
   shadcn: {
