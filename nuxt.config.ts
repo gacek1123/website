@@ -9,7 +9,13 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/image',
+    'nuxt-shiki'
   ],
+  shiki: {
+    bundledLangs: ["yaml", "shell", "python", "py"],
+    bundledThemes: ['material-theme-lighter', 'material-theme-darker'],
+  },
+
   shadcn: {
     /**
      * Prefix for all the imported component
