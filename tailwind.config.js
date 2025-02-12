@@ -15,6 +15,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: (theme) => ({
+        'gradient-article': ` linear-gradient(to right, var(--gradient-article))`,
+      }),
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
       },

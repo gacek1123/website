@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@nuxt/image',
     '@nuxtjs/color-mode',
+    '@nuxt/image',
   ],
   shadcn: {
     /**
@@ -24,5 +25,8 @@ export default defineNuxtConfig({
     families: {
       Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
     }
+  },
+  image: {
+
   }
 })

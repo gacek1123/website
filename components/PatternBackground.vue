@@ -15,6 +15,8 @@
 </template>
 
 <script lang="ts">
+// https://inspira-ui.com/components/backgrounds/pattern-background
+
 import { cva, type VariantProps } from "class-variance-authority";
 import type { HTMLAttributes } from "vue";
 

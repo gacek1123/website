@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import Footer from '~/components/home/Footer.vue';
 
 import {
@@ -84,11 +83,8 @@ const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
                     </div>
                     <div class="py-12 mx-auto max-w-max">
                         <ul class="flex items-center justify-center text-sm flex-wrap gap-5 text-muted-foreground">
-                            <li v-for="link in links" class="border-b hover:text-foreground transition-colors">
-                                <NuxtLink class="flex items-center" :to="link.link" external target="_blank">
-                                    <Icon :icon="link.icon" class="w-[1rem] h-[1rem]" />&nbsp;
-                                    {{ link.name }}
-                                </NuxtLink>
+                            <li v-for="link in links">
+                                <ExternalLink :icon="link.icon" :link="link.link" :name="link.name"></ExternalLink>
                             </li>
                         </ul>
                     </div>

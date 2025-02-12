@@ -1,4 +1,4 @@
-export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[] }
+export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[], id: string }
 
 export const usePosts = () => {
     const posts = useState<Post[] | undefined>("posts", () => undefined)

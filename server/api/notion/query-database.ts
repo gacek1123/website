@@ -41,14 +41,16 @@ export default cachedEventHandler(async (event) => {
             description: getTextProperty(Description),
             url: getTextProperty(Url),
             createdAt: getTextProperty(Published),
+            id: result.id
         }
     });
 });
 
 type TextPropertyType = "rich_text" | "title" | "url" | "created_time"
 
+const allowedTypes = new Set(["rich_text", "title", "url", "created_time"])
+
 function isText(type: Property["type"]): type is TextPropertyType {
-    const allowedTypes = new Set(["rich_text", "title", "url", "created_time"])
 
     if (!allowedTypes.has(type)) return false
 
