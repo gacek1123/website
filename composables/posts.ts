@@ -1,3 +1,5 @@
+import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
+
 export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[], id: string }
 
 export const usePosts = () => {
@@ -15,6 +17,9 @@ export const usePosts = () => {
         return { posts, error, status }
     }
 
+    const fetchBlocks = async (post_id: string, start_cursor: string | undefined = undefined) => {
+        return $fetch<ListBlockChildrenResponse>(`/api/notion/blocks/${post_id}` + (start_cursor ? `?start_cursor=${start_cursor}` : ''))
+    }
 
-    return { fetchPosts, posts }
+    return { fetchPosts, posts, fetchBlocks }
 }

@@ -1,5 +1,5 @@
-import { Client, isFullPage, isFullPageOrDatabase } from "@notionhq/client";
-import { DatabaseObjectResponse, PageObjectResponse, RichTextItemResponse, } from "@notionhq/client/build/src/api-endpoints";
+import { Client, isFullPage } from "@notionhq/client";
+import {  PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 export default cachedEventHandler(async (event) => {
     const query = getQuery(event as any);
