@@ -11,9 +11,8 @@ defineProps<{
 </script>
 
 <template>
-    <div class="mt-3 text-sm">
-        <div v-if="list_item.type === 'bulleted_list_item'" class="flex items-center">
-            <div class="bg-foreground rounded-full w-1.5 h-1.5 mr-2 "></div>
+    <div class="mt-3 text-sm text-muted-foreground">
+        <div v-if="list_item.type === 'bulleted_list_item'" class="list-item list-inside">
             <TextRenderer :text="list_item.bulleted_list_item.rich_text"></TextRenderer>
         </div>
         <div v-else>

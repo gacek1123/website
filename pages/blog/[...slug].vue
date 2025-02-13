@@ -40,13 +40,17 @@ const hasMore = ref(data.value?.has_more)
 const nextCursor = ref(data.value?.next_cursor)
 
 onMounted(() => {
+
+    // disable scroll resoration
+    if ("history" in window) {
+        window.history.scrollRestoration = 'auto';
+    }
+
     watch(loadMoreTrigger, () => setupObserver(), { once: true })
 })
 
-
 const setupObserver = () => {
     if (!loadMoreTrigger.value || status.value !== 'success' || !hasMore) return
-
 
     const observer = new IntersectionObserver(async (entries) => {
         if (entries[0].isIntersecting && hasMore.value && data.value) {
@@ -69,11 +73,7 @@ const setupObserver = () => {
     });
 
     observer.observe(loadMoreTrigger.value);
-
 }
-
-
-
 </script>
 
 

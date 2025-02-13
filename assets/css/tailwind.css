@@ -85,6 +85,9 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
 
 * {
   scrollbar-color: hsl(var(--scrollbar)) hsl(var(--background));

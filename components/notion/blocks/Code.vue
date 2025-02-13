@@ -18,7 +18,7 @@ const language: BundledLanguage | undefined = isAllowedLanguage(props.code.code.
             light: 'vitesse-light',
             dark: 'vitesse-dark'
         },
-    }" class="text-sm rounded-md overflow-x-auto" />
+    }" class="rounded-md overflow-x-auto" />
 </template>
 
 <style>
@@ -28,6 +28,10 @@ const language: BundledLanguage | undefined = isAllowedLanguage(props.code.code.
     overflow-x: auto;
 }
 
+.shiki,
+.shiki span {
+    background-color: hsl(0 0% 96.1%) !important;
+}
 
 html.dark-mode .shiki,
 html.dark-mode .shiki span {
