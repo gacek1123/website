@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import type { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type { BlockObjectResponse, PartialBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import Header from './Header.vue';
 import List from './List.vue';
 import Paragraph from './Paragraph.vue';
 import Image from './Image.vue';
 import Code from './Code.vue';
 
+import { isFullBlock } from "@notionhq/client";
+
 defineProps<{
-    block: BlockObjectResponse
+    block: BlockObjectResponse | PartialBlockObjectResponse
 }>()
 
 function isType<T extends BlockObjectResponse, U extends T["type"]>(
@@ -22,9 +24,11 @@ function isType<T extends BlockObjectResponse, U extends T["type"]>(
 </script>
 
 <template>
-    <Header v-if="isType(block, 'heading_1', 'heading_2', 'heading_3')" :block="block"></Header>
-    <List v-if="isType(block, 'bulleted_list_item', 'numbered_list_item')" :list_item="block"></List>
-    <Paragraph v-if="isType(block, 'paragraph')" :paragraph="block"></Paragraph>
-    <Image v-if="isType(block, 'image')" :image="block"></Image>
-    <Code v-if="isType(block, 'code')" :code="block"></Code>
+    <div v-if="!isFullBlock(block)"></div>
+    <Header v-else-if="isType(block, 'heading_1', 'heading_2', 'heading_3')" :block="block"></Header>
+    <List v-else-if="isType(block, 'bulleted_list_item', 'numbered_list_item')" :list_item="block"></List>
+    <Paragraph v-else-if="isType(block, 'paragraph')" :paragraph="block"></Paragraph>
+    <Image v-else-if="isType(block, 'image')" :image="block"></Image>
+    <Code v-else-if="isType(block, 'code')" :code="block"></Code>
+
 </template>

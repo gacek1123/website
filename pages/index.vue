@@ -96,10 +96,9 @@ const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
 
             <div>
                 <div class="text-center mx-auto text-3xl font-semibold my-12">
-                    <h2
-                        class="bg-gradient-to-t from-slate-400 to-slate-800 dark:from-slate-100 dark:to-slate-400 bg-clip-text text-transparent">
-                        Latest
-                        Articles</h2>
+                    <h2>
+                        Latest Articles
+                    </h2>
                 </div>
 
                 <ArticleCards :error="error" :status="status" :posts="latestPosts"></ArticleCards>

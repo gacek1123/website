@@ -5,7 +5,7 @@ const route = useRoute();
 
 const { fetchPosts, fetchBlocks } = usePosts()
 
-const { data } = useAsyncData<ListBlockChildrenResponse & { post: Post }>(async () => {
+const { data, status } = await useAsyncData<ListBlockChildrenResponse & { post: Post }>(async () => {
     const { error, posts } = await fetchPosts()
 
 
@@ -40,31 +40,39 @@ const hasMore = ref(data.value?.has_more)
 const nextCursor = ref(data.value?.next_cursor)
 
 onMounted(() => {
-    if (loadMoreTrigger.value) {
-        const observer = new IntersectionObserver(async (entries) => {
-            if (entries[0].isIntersecting && hasMore.value && data.value) {
-
-                const list = await fetchBlocks(data.value?.post.id, nextCursor.value ? nextCursor.value : undefined)
-                if (!list) {
-                    hasMore.value = false
-                    return
-                }
-
-                data.value.results.push(...list.results)
-
-                hasMore.value = list.has_more
-                nextCursor.value = list.next_cursor || null
-            }
-        }, {
-            rootMargin: "200px",
-            threshold: 0.1,
-
-        });
-
-        observer.observe(loadMoreTrigger.value);
-    }
+    watch(loadMoreTrigger, () => setupObserver(), { once: true })
 })
-import { Skeleton } from '@/components/ui/skeleton'
+
+
+const setupObserver = () => {
+    if (!loadMoreTrigger.value || status.value !== 'success' || !hasMore) return
+
+
+    const observer = new IntersectionObserver(async (entries) => {
+        if (entries[0].isIntersecting && hasMore.value && data.value) {
+
+            const list = await fetchBlocks(data.value?.post.id, nextCursor.value ? nextCursor.value : undefined)
+            if (!list) {
+                hasMore.value = false
+                return
+            }
+
+            data.value.results.push(...list.results)
+
+            hasMore.value = list.has_more
+            nextCursor.value = list.next_cursor
+        }
+    }, {
+        rootMargin: "200px",
+        threshold: 0.1,
+
+    });
+
+    observer.observe(loadMoreTrigger.value);
+
+}
+
+
 
 </script>
 
@@ -78,28 +86,14 @@ import { Skeleton } from '@/components/ui/skeleton'
             <p class="text-muted-foreground mt-4">{{ useFormattedDate(data.post.createdAt) }}</p>
         </div>
 
-        <article class="">
+        <article class="mb-24">
             <NotionRenderer :blocks="data.results"></NotionRenderer>
 
-
-            <div class="flex flex-col space-y-3 mt-10" ref="loadMoreTrigger" v-if="hasMore">
-
-                <div class="space-y-2">
-                    <Skeleton class="h-5 w-full" />
-                    <Skeleton class="h-5 w-[75%]" />
-                    <Skeleton class="h-5 w-[25%]" />
-                    <Skeleton class="h-5 w-[85%]" />
-                    <Skeleton class="h-5 w-full" />
-                    <Skeleton class="h-5 w-[95%]" />
-                    <Skeleton class="h-5 w-[35%]" />
-                    <Skeleton class="h-5 w-[45%]" />
+            <ClientOnly>
+                <div class="mt-10" ref="loadMoreTrigger" v-if="hasMore">
+                    Loading...
                 </div>
-            </div>
-
-
+            </ClientOnly>
         </article>
-
-
-
     </div>
 </template>

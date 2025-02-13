@@ -2,14 +2,13 @@
 import type { CodeBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { type BundledLanguage } from 'shiki';
 
-const { code } = defineProps<{ code: CodeBlockObjectResponse }>();
+const props = defineProps<{ code: CodeBlockObjectResponse }>();
 
-const text = code.code.rich_text.reduce((acc, curr) => acc + curr.plain_text, "");
+const text = props.code.code.rich_text.reduce((acc, curr) => acc + curr.plain_text, "");
 
-const isAllowedLanguage = (language: string): language is BundledLanguage => ["arduino", "agda"].includes(language)
+const isAllowedLanguage = (language: string): language is BundledLanguage => !["arduino", "agda"].includes(language)
 
-const language: BundledLanguage | undefined = isAllowedLanguage(code.code.language) ? code.code.language : undefined
-
+const language: BundledLanguage | undefined = isAllowedLanguage(props.code.code.language) ? props.code.code.language : undefined
 
 </script>
 
@@ -19,14 +18,16 @@ const language: BundledLanguage | undefined = isAllowedLanguage(code.code.langua
             light: 'vitesse-light',
             dark: 'vitesse-dark'
         },
-    }" class="text-sm rounded-md" />
+    }" class="text-sm rounded-md overflow-x-auto" />
 </template>
 
 <style>
 .shiki {
     padding: 1rem;
     border-radius: calc(var(--radius) - 2px);
+    overflow-x: auto;
 }
+
 
 html.dark-mode .shiki,
 html.dark-mode .shiki span {

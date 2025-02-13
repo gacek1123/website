@@ -35,6 +35,8 @@
     --radius: 0.5rem;
 
     --gradient-article: #bbf7d0, #dcfce7;
+
+    --scrollbar: 216 12.2% 83.9%
   }
 
   .dark-mode {
@@ -69,6 +71,7 @@
     --gradient-article: #14532d, #166534;
 
 
+    --scrollbar: 0 0% 14.9%
   }
 }
 
@@ -80,4 +83,24 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+* {
+  scrollbar-color: hsl(var(--scrollbar)) hsl(var(--background));
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--scrollbar));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: hsl(var(--background));
+  border-radius: 10px
 }
