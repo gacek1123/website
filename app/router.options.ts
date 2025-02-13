@@ -9,5 +9,6 @@ export default <RouterConfig>{
                 top: 0
             };
         }
-    }
+    },
+    scrollBehaviorType: 'auto'
 };
