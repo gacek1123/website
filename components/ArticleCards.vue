@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { AsyncDataRequestStatus } from '#app';
+import type { Post } from '~/lib/notion';
 
 defineProps<{
     status?: AsyncDataRequestStatus,

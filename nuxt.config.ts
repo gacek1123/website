@@ -1,4 +1,5 @@
 import { getPages } from "./lib/notion"
+import { definePerson } from 'nuxt-schema-org/schema'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -13,24 +14,44 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-shiki',
     '@nuxtjs/seo',
+    'nuxt-og-image',
   ],
   shiki: {
     bundledLangs: ["yaml", "shell", "python", "py"],
     bundledThemes: ['vitesse-light', 'vitesse-dark'],
-
   },
   site: {
     url: 'https://fszarek.me',
-    name: '',
+    name: "Nei's website",
+    indexable: true,
+    defaultLocale: "en",
+    description: "High school student from Poland, passionate about gaining knowledge and solving new problems while working on projects."
+  },
+
+
+  schemaOrg: {
+    identity: definePerson({
+      name: 'Franciszek Szarek',
+      description: 'Software engineer',
+      url: 'fszarek.me',
+      sameAs: [
+        'https://github.com/nei7'
+      ],
+    }),
+
+  },
+  ogImage: {
+    debug: true,
+    fonts: ["Inter:400", 'Inter:500', "Inter:700"]
   },
 
   sitemap: {
     urls: async () => {
       const pages = await getPages()
       return pages.map(page => ({
-        loc: page.url,
+        loc: "/blog/" + page.url,
         priority: 0.5,
-        lastmod: page.createdAt,
+        lastmod: page.lastEditedTime,
         changefreq: 'monthly'
       }))
     }

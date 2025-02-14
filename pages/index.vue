@@ -25,7 +25,7 @@ const links = [
     },
     {
         icon: "simple-icons:x",
-        link: "",
+        link: "https://x.com/nei13371",
         name: "x.com"
     },
     {
@@ -40,7 +40,6 @@ const { fetchPosts } = usePosts()
 const { error, status, posts } = await fetchPosts()
 
 const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
-
 </script>
 
 <template>

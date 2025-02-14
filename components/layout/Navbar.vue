@@ -19,9 +19,6 @@ const pages = [
     {
         name: "Blog",
         link: "/blog"
-    },
-    {
-        name: "Dashboard"
     }
 ]
 </script>

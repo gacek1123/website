@@ -7,6 +7,8 @@ const notion = new Client({
     timeoutMs: 7000
 });
 
+export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[], id: string, description: string, lastEditedTime: string }
+
 export function getBlocks(block_id: string, start_cursor: string | undefined = undefined) {
     return notion.blocks.children.list({
         block_id, page_size: 50, start_cursor
@@ -32,8 +34,7 @@ export async function getPages(size?: number) {
         page_size: size
     });
 
-
-    return response.results.filter((result) => isFullPage(result)).map((result) => {
+    return response.results.filter((result) => isFullPage(result)).map<Post>((result) => {
         const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage } = result.properties
 
         return {
@@ -43,7 +44,8 @@ export async function getPages(size?: number) {
             description: getTextProperty(Description),
             url: getTextProperty(Url),
             createdAt: getTextProperty(Published),
-            id: result.id
+            id: result.id,
+            lastEditedTime: result.last_edited_time
         }
     });
 }
