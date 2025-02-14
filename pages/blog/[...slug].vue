@@ -1,45 +1,33 @@
 <script setup lang="ts">
-import type { ListBlockChildrenResponse } from '@notionhq/client/build/src/api-endpoints';
 
 const route = useRoute();
 
-const { fetchPosts, fetchBlocks } = usePosts()
-
-const { data, status } = await useAsyncData<ListBlockChildrenResponse & { post: Post }>(async () => {
-    const { error, posts } = await fetchPosts()
+const { fetchPosts } = usePosts()
+const { fetchBlocks, getBlockById } = usePostBlocks()
 
 
-    if (!posts?.value || error?.value) throw createError({
-        ...error?.value,
-    })
+const { posts } = await fetchPosts()
 
-    const post = posts.value?.find(({ url }) => url === route.params.slug[0]);
-
-
-    if (!post) throw createError({
-        statusCode: 404,
-        message: 'Not found',
-        fatal: true
-    })
-
-
-    const list = await fetchBlocks(post.id)
-
-    if (!list) throw createError({
-        statusCode: 500,
-    })
-
-    return {
-        ...list,
-        post: post
-    }
+if (!posts || !posts.value) throw createError({
+    message: "Failed to fetch posts",
+    status: 500,
 })
+
+const post = posts.value.find(({ url }) => url === route.params.slug[0])
+if (!post) throw createError({
+    message: "Post not found",
+    fatal: true,
+    statusCode: 404
+})
+
+await useAsyncData(() => fetchBlocks(post.id))
+
+const block = getBlockById(post.id)
+
 
 const loadMoreTrigger = ref<HTMLDivElement>()
 
 onMounted(() => {
-
-
     if ("history" in window) {
         window.history.scrollRestoration = 'auto';
     }
@@ -48,21 +36,11 @@ onMounted(() => {
 })
 
 const setupObserver = () => {
-    if (!loadMoreTrigger.value || status.value !== 'success') return
+    if (!loadMoreTrigger.value || !block.has_more) return
 
     const observer = new IntersectionObserver(async (entries) => {
-        if (entries[0].isIntersecting && data.value && data.value.next_cursor) {
-
-            const list = await fetchBlocks(data.value?.post.id, data.value.next_cursor ? data.value.next_cursor : undefined)
-            if (!list) {
-                data.value.has_more = false
-                return
-            }
-
-            data.value.results.push(...list.results)
-
-            data.value.has_more = list.has_more
-            data.value.next_cursor = list.next_cursor
+        if (entries[0].isIntersecting && block.has_more) {
+            await fetchBlocks(post.id)
         }
     }, {
         rootMargin: "200px",
@@ -72,23 +50,23 @@ const setupObserver = () => {
 
     observer.observe(loadMoreTrigger.value);
 }
-</script>
 
+</script>
 
 <template>
 
-    <div class="mx-auto w-full max-w-4xl" v-if="data">
+    <div class="mx-auto w-full max-w-4xl" v-if="post">
 
         <div class="mt-12 lg:py-12 px-4  ">
-            <h1 class="text-4xl font-bold">{{ data.post.title }}</h1>
-            <p class="text-muted-foreground mt-4">{{ useFormattedDate(data.post.createdAt) }}</p>
+            <h1 class="text-4xl font-bold">{{ post.title }}</h1>
+            <p class="text-muted-foreground mt-4">{{ useFormattedDate(post.createdAt) }}</p>
         </div>
 
         <article class="mb-24 px-4 text-justify sm:text-start">
-            <NotionRenderer :blocks="data.results"></NotionRenderer>
+            <NotionRenderer :blocks="block.results"></NotionRenderer>
 
             <ClientOnly>
-                <div class="mt-10" ref="loadMoreTrigger" v-if="data.has_more">
+                <div class="mt-10" ref="loadMoreTrigger" v-if="block.has_more">
                     Loading...
                 </div>
             </ClientOnly>

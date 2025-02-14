@@ -17,9 +17,45 @@ export const usePosts = () => {
         return { posts, error, status }
     }
 
-    const fetchBlocks = async (post_id: string, start_cursor: string | undefined = undefined) => {
-        return $fetch<ListBlockChildrenResponse>(`/api/notion/blocks/${post_id}` + (start_cursor ? `?start_cursor=${start_cursor}` : ''))
+
+    return { fetchPosts, posts }
+}
+
+
+export const usePostBlocks = () => {
+    const blocks = useState<Record<string, ListBlockChildrenResponse>>("blocks", () => ({}))
+
+    const fetchBlocks = async (post_id: string) => {
+        const block = post_id in blocks.value ? blocks.value[post_id] : undefined
+
+        if (block && !block.has_more)
+            return block
+
+        const response = await $fetch<ListBlockChildrenResponse>(`/api/notion/blocks/${post_id}` + (block?.next_cursor ? `?start_cursor=${block.next_cursor}` : ''))
+
+        if (!block) {
+            blocks.value[post_id] = response
+
+            return response
+        }
+
+
+        const { has_more, results, next_cursor } = response
+
+        block.has_more = has_more
+        block.next_cursor = next_cursor
+        block.results.push(...results)
+
+        return response
     }
 
-    return { fetchPosts, posts, fetchBlocks }
+    const getBlockById = (postId: string) => {
+        return blocks.value[postId]
+    }
+
+
+    return {
+        getBlockById,
+        fetchBlocks
+    }
 }

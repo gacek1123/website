@@ -12,10 +12,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/image',
     'nuxt-shiki',
-    '@nuxtjs/sitemap',
-    '@nuxtjs/robots',
-    'nuxt-site-config',
-
+    '@nuxtjs/seo',
   ],
   shiki: {
     bundledLangs: ["yaml", "shell", "python", "py"],
@@ -40,7 +37,6 @@ export default defineNuxtConfig({
   },
   robots: {
     blockNonSeoBots: true,
-    disallow: "",
     sitemap: ['https://fszarek.me/sitemap.xml']
   },
 
