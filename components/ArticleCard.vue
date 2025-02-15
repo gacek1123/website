@@ -23,8 +23,7 @@ const date = useFormattedDate(props.date)
     <NuxtLink :to="'/blog/' + path" :aria-label="title" class="flex cursor-pointer flex-col gap-2 group">
         <div class="relative rounded-md overflow-hidden">
             <div class="absolute z-10 top-2 left-2">
-                <Badge v-for="tag in tags" class="mr-2"
-                    :style="{/* backgroundColor: tag.color in tagColors ? tagColors[tag.color as keyof typeof tagColors] : tagColors['gray'] */ }">
+                <Badge v-for="tag in tags" class="mr-2 text-white bg-neutral-800">
                     {{
                         tag.name
                     }}</Badge>

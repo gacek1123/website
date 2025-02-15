@@ -50,11 +50,10 @@ const setupObserver = () => {
     observer.observe(loadMoreTrigger.value);
 }
 
-defineOgImageComponent('Blog', {
+defineOgImageComponent('Image', {
     title: post.title,
     description: post.description,
-    date: useFormattedDate(post.createdAt),
-    tags: post.tags.map(tag => tag.name)
+    headline: post.tags[0].name
 })
 
 useSeoMeta({

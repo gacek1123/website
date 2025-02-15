@@ -7,7 +7,10 @@ import SpotifyStatus from '~/components/home/SpotifyStatus.vue';
         <div class="flex justify-between">
             <SpotifyStatus />
 
-            <div class="opacity-50 text-xs">© 2025 Franciszek Szarek</div>
+            <div
+                class="bg-gradient-to-t from-muted-foreground to-muted-foreground bg-clip-text text-transparent text-xs">
+                © 2025 Franciszek Szarek
+            </div>
         </div>
     </footer>
 </template>

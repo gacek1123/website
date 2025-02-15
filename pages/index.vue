@@ -40,6 +40,17 @@ const { fetchPosts } = usePosts()
 const { error, status, posts } = await fetchPosts()
 
 const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
+
+const config = useSiteConfig()
+
+const route = useRoute()
+
+defineOgImageComponent('Image', {
+    title: config.name,
+    description: config.description,
+    headline: route.path
+})
+
 </script>
 
 <template>
@@ -73,11 +84,14 @@ const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
                         style="--stagger:2;" data-animate="">
                         <span class="ml-2 relative flex size-3">
                             <span
-                                class="bg-green-600/80 absolute inline-flex size-full animate-ping rounded-full opacity-75">
+                                class="bg-gradient-to-t from-green-600 to-green-600 absolute inline-flex size-full animate-ping rounded-full opacity-75">
                             </span>
-                            <span class="bg-green-500/80 relative inline-flex size-3 scale-90 rounded-full"></span>
+                            <span
+                                class="bg-gradient-to-t from-green-500 to-green-500 relative inline-flex size-3 scale-90 rounded-full"></span>
                         </span>
-                        <span class="text-green-500/80 ml-2 text-sm font-medium">Available for new opportunities</span>
+                        <span
+                            class="bg-gradient-to-t from-green-500 to-green-500 text-transparent bg-clip-text  ml-2 text-sm font-medium">
+                            Available for new opportunities</span>
 
                     </div>
                     <div class="py-12 mx-auto max-w-max">
@@ -106,7 +120,7 @@ const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
 
                     <Button variant="outline" as-child>
                         <NuxtLink to="/blog">
-                            See more
+                            See all posts
                         </NuxtLink>
                     </Button>
                 </div>

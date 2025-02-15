@@ -18,7 +18,18 @@ const filteredPosts = computed(() => {
     if (posts?.value) return posts.value.filter((post) =>
         post.title.toLowerCase().includes(searchText.value.toLowerCase())
     )
+})
 
+
+
+const description = `Here I share knowledge, experiences and thoughts on topics that fascinate me.`
+
+const route = useRoute()
+
+defineOgImageComponent('Image', {
+    title: 'Blog',
+    description,
+    headline: route.path
 })
 </script>
 
@@ -37,9 +48,7 @@ const filteredPosts = computed(() => {
                         Blog
                     </h1>
                 </div>
-                <p class="max-w-screen-sm mx-auto text-lg text-muted-foreground">Here I share knowledge, experiences and
-                    thoughts
-                    on topics that fascinate me. </p>
+                <h2 class="max-w-screen-sm mx-auto text-lg text-muted-foreground"> {{ description }}</h2>
             </div>
 
 
@@ -48,9 +57,9 @@ const filteredPosts = computed(() => {
         </div>
         <div class="my-16 px-4">
             <div class="relative w-full items-center">
-                <Input v-model="searchText" id="search" type="text" placeholder="Search..." class="pl-10" />
-                <span class=" absolute start-0 inset-y-0 flex items-center justify-center px-2">
-                    <Search class="size-5 text-muted-foreground" />
+                <Input v-model="searchText" id="search" type="text" placeholder="Search..." class="pl-12" />
+                <span class=" absolute start-0 inset-y-0 flex items-center justify-center px-2 pl-4">
+                    <Search class="size-[1.2rem] text-muted-foreground" />
                 </span>
             </div>
         </div>
