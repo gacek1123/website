@@ -27,7 +27,12 @@ onMounted(async () => {
     }
 
     if (language)
-        code.value = await highlighter.codeToHtml(text, { lang: language, theme: colorMode.value === 'dark' ? "vitesse-dark" : "vitesse-light" })
+        code.value = await highlighter.codeToHtml(text, {
+            lang: language, themes: {
+                light: 'vitesse-light',
+                dark: 'vitesse-dark'
+            },
+        })
 })
 
 
