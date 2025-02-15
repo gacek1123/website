@@ -70,7 +70,7 @@ useSeoMeta({
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-7 px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-7 px-4 mb-20">
             <template v-for="post in filteredPosts">
                 <ArticleCard v-if="post" :title="post.title" :image="post.image" :path="post.url" :date="post.createdAt"
                     :tags="post.tags" />

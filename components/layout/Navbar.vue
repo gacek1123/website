@@ -34,7 +34,7 @@ const pages = [
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
-        <div class="hidden items-center gap-4 lg:flex">
+        <div class="items-center gap-4 flex">
             <Button variant="outline" aria-label="Open command menu" class="px-2">
                 <Icon icon="material-symbols:keyboard-command-key" class="h-5 w-5" />
             </Button>

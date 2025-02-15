@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
 
-const { status, data: song } = useFetch<any>("/api/spotify", { lazy: true })
+
+
+const { status, data: song } = useFetch<{
+    name: string | null
+    isPlaying: boolean,
+    songUrl: string | null
+    artist: string[] | null
+
+}>("/api/spotify", { lazy: true })
+
+const songName = computed(() => (song.value?.name || '').slice(0, 20))
+const songArtist = computed(() => (song.value?.artist || []).join(", ").slice(0, 30))
 </script>
 
 <template>
@@ -17,9 +28,9 @@ const { status, data: song } = useFetch<any>("/api/spotify", { lazy: true })
                     Loading...
                 </template>
 
-                <template v-else-if="song.isPlaying">
-                    <NuxtLink :to="song.songUrl">
-                        {{ song.name }} - {{ song.artist[0] }}
+                <template v-else-if="song && song.isPlaying">
+                    <NuxtLink :to="song.songUrl || ''">
+                        {{ songName }} - {{ songArtist }}
                     </NuxtLink>
                 </template>
                 <template v-else>Not playing</template>

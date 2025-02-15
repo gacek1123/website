@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Footer from '~/components/home/Footer.vue';
+import Footer from '~/components/layout/Footer.vue';
 
 import {
     PATTERN_BACKGROUND_DIRECTION,
@@ -118,7 +118,7 @@ defineOgImageComponent('Image', {
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-7 px-4">
-                    <template v-for="post in posts">
+                    <template v-for="post in latestPosts">
                         <ArticleCard v-if="post" :title="post.title" :image="post.image" :path="post.url"
                             :date="post.createdAt" :tags="post.tags" />
                     </template>
