@@ -12,16 +12,15 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/image',
-    'nuxt-shiki',
+
     '@nuxtjs/seo',
     'nuxt-og-image',
   ],
-  shiki: {
-    bundledLangs: ["yaml", "shell", "python", "py"],
-    bundledThemes: ['vitesse-light', 'vitesse-dark'],
+  build: {
+    transpile: ['shiki'],
   },
   site: {
-    url: 'https://fszarek.me',
+    url: 'https://www.fszarek.me',
     name: "Nei's website",
     indexable: true,
     defaultLocale: "en",
@@ -42,7 +41,10 @@ export default defineNuxtConfig({
   },
   ogImage: {
     debug: true,
-    fonts: ["Inter:400", 'Inter:500', "Inter:700"]
+    fonts: ["Inter:400", 'Inter:500', "Inter:700"],
+    defaults: {
+      cacheMaxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+    }
   },
 
   sitemap: {
@@ -57,8 +59,7 @@ export default defineNuxtConfig({
     }
   },
   robots: {
-    blockNonSeoBots: true,
-    sitemap: ['https://fszarek.me/sitemap.xml']
+    sitemap: ['https://www.fszarek.me/sitemap.xml']
   },
 
   shadcn: {

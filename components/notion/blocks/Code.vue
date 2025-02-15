@@ -1,24 +1,41 @@
 <script setup lang="ts">
 import type { CodeBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { type BundledLanguage } from 'shiki';
+
 
 const props = defineProps<{ code: CodeBlockObjectResponse }>();
 
 const text = props.code.code.rich_text.reduce((acc, curr) => acc + curr.plain_text, "");
 
-const isAllowedLanguage = (language: string): language is BundledLanguage => !["arduino", "agda"].includes(language)
+const isAllowedLanguage = (language: string) => !["arduino", "agda"].includes(language)
 
-const language: BundledLanguage | undefined = isAllowedLanguage(props.code.code.language) ? props.code.code.language : undefined
+const language: string | undefined = isAllowedLanguage(props.code.code.language) ? props.code.code.language : undefined
+
+const code = ref("")
+
+const colorMode = useColorMode()
+const highlighter = await getHighlighter()
+
+onMounted(async () => {
+    const { bundledLanguages } = await import('shiki/langs')
+
+
+    if (language && !highlighter.getLoadedLanguages().includes(language)) {
+        const importFn = (bundledLanguages as any)[language]
+        if (!importFn) return
+
+        await highlighter.loadLanguage(importFn)
+    }
+
+    if (language)
+        code.value = await highlighter.codeToHtml(text, { lang: language, theme: colorMode.value === 'dark' ? "vitesse-dark" : "vitesse-light" })
+})
+
+
 
 </script>
 
 <template>
-    <Shiki :lang="language" :code="text" as="div" :highlight-options="{
-        themes: {
-            light: 'vitesse-light',
-            dark: 'vitesse-dark'
-        },
-    }" class="rounded-md overflow-x-auto" />
+    <div v-html="code" class="rounded-md overflow-x-auto"></div>
 </template>
 
 <style>

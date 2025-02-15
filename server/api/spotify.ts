@@ -42,4 +42,4 @@ const getNowPlaying = async () => {
   }
 };
 
-export default defineEventHandler(() => getNowPlaying());
+export default cachedEventHandler(() => getNowPlaying());

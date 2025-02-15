@@ -12,5 +12,8 @@ export default cachedEventHandler(async (event) => {
     const query = getQuery(event)
 
     return getBlocks(pageId, query.start_cursor?.toString())
+}, {
+    maxAge: 60 * 60 * 24,
+    swr: true
 });
 

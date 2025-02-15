@@ -7,6 +7,9 @@ import {
     PATTERN_BACKGROUND_VARIANT,
 } from "../components/PatternBackground.vue"
 
+import ArticleCard from '~/components/ArticleCard.vue';
+
+
 const links = [
     {
         icon: "simple-icons:github",
@@ -114,7 +117,12 @@ defineOgImageComponent('Image', {
                     </h2>
                 </div>
 
-                <ArticleCards :error="error" :status="status" :posts="latestPosts"></ArticleCards>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-7 px-4">
+                    <template v-for="post in posts">
+                        <ArticleCard v-if="post" :title="post.title" :image="post.image" :path="post.url"
+                            :date="post.createdAt" :tags="post.tags" />
+                    </template>
+                </div>
 
                 <div class="flex items-center justify-center my-14">
 

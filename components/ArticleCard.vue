@@ -29,7 +29,7 @@ const date = useFormattedDate(props.date)
                     }}</Badge>
             </div>
             <div class="transition-colors duration-200">
-                <NuxtImg width="1536" :alt="`${title} article image`"
+                <NuxtImg fit="cover" width="1366" :alt="`${title} article image`"
                     class="h-64 w-full object-cover transition-transform duration-200 group-hover:scale-105"
                     :src="image" :aria-label="`${title} article image`" />
             </div>

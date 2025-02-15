@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Search } from 'lucide-vue-next'
-import ArticleCards from '~/components/ArticleCards.vue';
+
+import ArticleCard from '~/components/ArticleCard.vue'
+
 import {
     PATTERN_BACKGROUND_DIRECTION,
     PATTERN_BACKGROUND_SPEED,
     PATTERN_BACKGROUND_VARIANT,
-} from "../components/PatternBackground.vue"
+} from "../../components/PatternBackground.vue"
 
 const { fetchPosts } = usePosts()
 
@@ -30,6 +32,10 @@ defineOgImageComponent('Image', {
     title: 'Blog',
     description,
     headline: route.path
+})
+
+useSeoMeta({
+    description,
 })
 </script>
 
@@ -64,7 +70,12 @@ defineOgImageComponent('Image', {
             </div>
         </div>
 
-        <ArticleCards :error="error" :status="status" :posts="filteredPosts"></ArticleCards>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-7 px-4">
+            <template v-for="post in filteredPosts">
+                <ArticleCard v-if="post" :title="post.title" :image="post.image" :path="post.url" :date="post.createdAt"
+                    :tags="post.tags" />
+            </template>
+        </div>
 
     </section>
 

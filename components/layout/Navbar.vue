@@ -28,14 +28,14 @@ const pages = [
         <NavigationMenu class="block">
             <NavigationMenuList>
                 <NavigationMenuItem v-for="item in pages">
-                    <NuxtLink :to="item.link" :class="navigationMenuTriggerStyle()">
+                    <NuxtLink :to="item.link" :aria-label="item.name" :class="navigationMenuTriggerStyle()">
                         {{ item.name }}
                     </NuxtLink>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
         <div class="hidden items-center gap-4 lg:flex">
-            <Button variant="outline" class="px-2">
+            <Button variant="outline" aria-label="Open command menu" class="px-2">
                 <Icon icon="material-symbols:keyboard-command-key" class="h-5 w-5" />
             </Button>
             <LayoutThemeSwitch></LayoutThemeSwitch>
