@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['shiki'],
+    transpile: ['shiki', '@notionhq/client'],
   },
 
   site: {

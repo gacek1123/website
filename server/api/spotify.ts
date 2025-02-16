@@ -1,6 +1,6 @@
 import { stringify } from "querystring";
 
-const basicAuth = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString("base64");
+const basicAuth = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString("base64");
 
 const getAccessToken = () => {
   return $fetch<{ access_token: string }>("https://accounts.spotify.com/api/token", {
@@ -11,7 +11,7 @@ const getAccessToken = () => {
     },
     body: stringify({
       grant_type: "refresh_token",
-      refresh_token: SPOTIFY_REFRESH_TOKEN
+      refresh_token: process.env.SPOTIFY_REFRESH_TOKEN
     })
   });
 };
@@ -33,6 +33,7 @@ const getNowPlaying = async () => {
       artist: response.item.artists.map((artist: { name: string }) => artist.name)
     }
   } catch (err) {
+    console.log(err)
     return {
       isPlaying: false,
       songUrl: null,
