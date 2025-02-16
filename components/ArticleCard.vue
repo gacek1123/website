@@ -2,12 +2,6 @@
 import { useFormattedDate } from '~/composables/date';
 import { Badge } from './ui/badge';
 
-const tagColors = {
-    blue: "#0069A8",
-    green: "#008236",
-    gray: "#364153",
-}
-
 const props = defineProps<{
     title: string,
     date: string,
