@@ -12,13 +12,14 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxt/image',
-
     '@nuxtjs/seo',
     'nuxt-og-image',
+    '@nuxthub/core'
   ],
   build: {
     transpile: ['shiki'],
   },
+
   site: {
     url: 'https://www.fszarek.me',
     name: "Nei's website",

@@ -1,8 +1,6 @@
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
 import type { Post } from "~/lib/notion"
 
-
-
 export const usePosts = () => {
     const posts = useState<Post[] | undefined>("posts", () => undefined)
 
