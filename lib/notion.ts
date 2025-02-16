@@ -1,10 +1,12 @@
 
 import { Client, isFullPage } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import type { SupportedRequestInfo, SupportedRequestInit } from "@notionhq/client/build/src/fetch-types";
 
 const notion = new Client({
     auth: process.env.NOTION_API_TOKEN,
-    timeoutMs: 7000
+    timeoutMs: 7000,
+    fetch: (url: SupportedRequestInfo, init?: SupportedRequestInit) => fetch(url, init)
 });
 
 export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[], id: string, description: string, lastEditedTime: string }
@@ -33,8 +35,6 @@ export async function getPages(size?: number) {
         ],
         page_size: size
     });
-
-    console.log(response)
 
     return response.results.filter((result) => isFullPage(result)).map<Post>((result) => {
         const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage } = result.properties
