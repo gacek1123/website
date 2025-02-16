@@ -49,15 +49,15 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    urls: async () => {
-      const pages = await getPages()
-      return pages.map(page => ({
-        loc: "/blog/" + page.url,
-        priority: 0.5,
-        lastmod: page.lastEditedTime,
-        changefreq: 'monthly'
-      }))
-    }
+    // urls: async () => {
+    //   const pages = await getPages()
+    //   return pages.map(page => ({
+    //     loc: "/blog/" + page.url,
+    //     priority: 0.5,
+    //     lastmod: page.lastEditedTime,
+    //     changefreq: 'monthly'
+    //   }))
+    // }
   },
   robots: {
     sitemap: ['https://www.fszarek.me/sitemap.xml']

@@ -27,7 +27,7 @@ dependencies:
     specifier: ^2.1.1
     version: 2.1.1(h3@1.15.0)(typescript@5.7.3)(unhead@1.11.19)(vite@6.1.0)(vue@3.5.13)
   '@vueuse/core':
-    specifier: ^12.5.0
+    specifier: ^12.7.0
     version: 12.7.0(typescript@5.7.3)
   class-variance-authority:
     specifier: ^0.7.1
@@ -54,7 +54,7 @@ dependencies:
     specifier: 0.3.0
     version: 0.3.0
   radix-vue:
-    specifier: ^1.9.13
+    specifier: ^1.9.14
     version: 1.9.14(vue@3.5.13)
   shadcn-nuxt:
     specifier: 0.11.3
@@ -65,6 +65,12 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.17)
+  vitesse-dark:
+    specifier: link:@shikijs/themes/vitesse-dark
+    version: link:@shikijs/themes/vitesse-dark
+  vitesse-light:
+    specifier: link:@shikijs/themes/vitesse-light
+    version: link:@shikijs/themes/vitesse-light
   vue:
     specifier: latest
     version: 3.5.13(typescript@5.7.3)
@@ -83,7 +89,7 @@ devDependencies:
     specifier: ^1.50.1
     version: 1.50.1
   shiki:
-    specifier: ^2.3.2
+    specifier: ^2.4.1
     version: 2.4.1
   wrangler:
     specifier: ^3.109.1
