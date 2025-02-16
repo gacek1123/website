@@ -4,7 +4,7 @@ export default cachedEventHandler((event) => {
     const id = event.context.params?.id as string;
 
     const notion = new Client({
-        auth: process.env.NOTION_API_TOKEN,
+        auth: NOTION_API_TOKEN,
         timeoutMs: 7000
     });
 

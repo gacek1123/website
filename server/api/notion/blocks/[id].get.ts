@@ -1,6 +1,5 @@
-import { Client } from "@notionhq/client";
 import { getBlocks } from "~/lib/notion";
-
+import type { H3Event } from 'h3'
 
 
 export default cachedEventHandler(async (event) => {
@@ -14,6 +13,7 @@ export default cachedEventHandler(async (event) => {
     return getBlocks(pageId, query.start_cursor?.toString())
 }, {
     maxAge: 60 * 60 * 24,
-    swr: true
+    swr: true,
+    getKey: (event: H3Event) => event.path
 });
 

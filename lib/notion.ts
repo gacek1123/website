@@ -3,7 +3,7 @@ import { Client, isFullPage } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 const notion = new Client({
-    auth: process.env.NOTION_API_TOKEN,
+    auth: NOTION_API_TOKEN,
     timeoutMs: 7000
 });
 
@@ -18,7 +18,7 @@ export function getBlocks(block_id: string, start_cursor: string | undefined = u
 
 export async function getPages(size?: number) {
     const response = await notion.databases.query({
-        database_id: process.env.NOTION_POST_DATABASE as string,
+        database_id: NOTION_POST_DATABASE as string,
         filter: {
             property: "Status",
             status: {

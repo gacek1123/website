@@ -16,6 +16,11 @@ export default defineNuxtConfig({
     'nuxt-og-image',
     '@nuxthub/core'
   ],
+
+  hub: {
+    cache: true
+  },
+
   build: {
     transpile: ['shiki'],
   },
