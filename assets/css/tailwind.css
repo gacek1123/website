@@ -191,7 +191,6 @@ html {
 }
 
 .move {
-  animation-duration: 25000ms;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }

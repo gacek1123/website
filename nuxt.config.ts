@@ -17,9 +17,11 @@ export default defineNuxtConfig({
     '@nuxthub/core'
   ],
 
-
+  nitro: {
+  },
   hub: {
-    cache: true
+    cache: true,
+    kv: true
   },
   build: {
     transpile: ['shiki'],
@@ -50,6 +52,10 @@ export default defineNuxtConfig({
     fonts: ["Inter:400", 'Inter:500', "Inter:700"],
     defaults: {
       cacheMaxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+    },
+    runtimeCacheStorage: {
+      driver: 'cloudflare-kv-binding',
+      binding: 'OG_IMAGE_CACHE'
     }
   },
 

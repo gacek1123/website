@@ -1,18 +1,20 @@
-import { stringify } from "querystring";
 
 const basicAuth = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString("base64");
 
 const getAccessToken = () => {
+
+  const params = new URLSearchParams()
+
+  params.set("grant_type", "refresh_token")
+  params.set("refresh_token", process.env.SPOTIFY_REFRESH_TOKEN as string)
+
   return $fetch<{ access_token: string }>("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization: `Basic ${basicAuth}`
     },
-    body: stringify({
-      grant_type: "refresh_token",
-      refresh_token: process.env.SPOTIFY_REFRESH_TOKEN
-    })
+    body: params
   });
 };
 

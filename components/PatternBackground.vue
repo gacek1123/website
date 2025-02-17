@@ -1,5 +1,7 @@
 <template>
-    <div :class="cn(
+    <div :style="{
+        animationDuration: durationFormSpeed
+    }" :class="cn(
         patternBackgroundVariants({ variant, size }),
         ` ${animate ? 'move move-' + direction : ''} `,
         props.class,

@@ -21,9 +21,6 @@ const filteredPosts = computed(() => {
         post.title.toLowerCase().includes(searchText.value.toLowerCase())
     )
 })
-
-
-
 const description = `Here I share knowledge, experiences and thoughts on topics that fascinate me.`
 
 const route = useRoute()
@@ -37,6 +34,7 @@ defineOgImageComponent('Image', {
 useSeoMeta({
     description,
 })
+
 </script>
 
 <template>
@@ -54,7 +52,7 @@ useSeoMeta({
                         Blog
                     </h1>
                 </div>
-                <h2 class="max-w-screen-sm mx-auto text-lg text-muted-foreground"> {{ description }}</h2>
+                <h2 class="max-w-screen-sm mx-auto sm:text-lg text-muted-foreground"> {{ description }}</h2>
             </div>
 
 
