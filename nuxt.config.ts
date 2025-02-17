@@ -14,8 +14,12 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/seo',
     'nuxt-og-image',
-    '@nuxthub/core'
+    '@nuxthub/core',
+    'nuxt-shiki'
   ],
+  shiki: {
+    bundledThemes: ["vitesse-light", "vitesse-dark"],
+  },
 
   nitro: {
   },
@@ -60,15 +64,15 @@ export default defineNuxtConfig({
   },
 
   sitemap: {
-    // urls: async () => {
-    //   const pages = await getPages()
-    //   return pages.map(page => ({
-    //     loc: "/blog/" + page.url,
-    //     priority: 0.5,
-    //     lastmod: page.lastEditedTime,
-    //     changefreq: 'monthly'
-    //   }))
-    // }
+    /*     urls: async () => {
+          const pages = await getPages()
+          return pages.map(page => ({
+            loc: "/blog/" + page.url,
+            priority: 0.5,
+            lastmod: page.lastEditedTime,
+            changefreq: 'monthly'
+          }))
+        } */
   },
   robots: {
     sitemap: ['https://www.fszarek.me/sitemap.xml']
