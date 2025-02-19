@@ -1,5 +1,12 @@
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
 import type { Post } from "~/lib/notion"
+import { createStorage } from "unstorage";
+import lruCacheDriver from "unstorage/drivers/lru-cache";
+
+const blockStorage = createStorage({
+    driver: lruCacheDriver({
+    }),
+});
 
 export const usePosts = () => {
     const posts = useState<Post[] | undefined>("posts", () => undefined)
@@ -16,41 +23,49 @@ export const usePosts = () => {
         return { posts, error, status }
     }
 
+    const fetchPost = async (postId: string) => {
+        return $fetch<Post>("/api/notion/page/" + postId)
+    }
 
-    return { fetchPosts, posts }
+
+    return { fetchPosts, posts, fetchPost }
 }
 
 
 export const usePostBlocks = () => {
-    const blocks = useState<Record<string, ListBlockChildrenResponse>>("blocks", () => ({}))
+    const fetchBlocks = async (postId: string, block?: Ref<ListBlockChildrenResponse | null>): Promise<ListBlockChildrenResponse | null> => {
 
-    const fetchBlocks = async (post_id: string) => {
-        const block = post_id in blocks.value ? blocks.value[post_id] : undefined
+        if (!block?.value) {
+            const block = await getBlockById(postId)
+            if (block) return block
+        }
 
-        if (block && !block.has_more)
-            return block
+        if (block?.value && !block.value.has_more)
+            return block?.value
 
-        const response = await $fetch<ListBlockChildrenResponse>(`/api/notion/blocks/${post_id}` + (block?.next_cursor ? `?start_cursor=${block.next_cursor}` : ''))
+        const response = await $fetch<ListBlockChildrenResponse>(`/api/notion/blocks/${postId}` + (block?.value?.next_cursor ? `?start_cursor=${block.value.next_cursor}` : ''))
 
         if (!block) {
-            blocks.value[post_id] = response
+            blockStorage.set(postId, response)
 
             return response
         }
 
+        if (!block.value)
+            block.value = response
 
         const { has_more, results, next_cursor } = response
 
-        block.has_more = has_more
-        block.next_cursor = next_cursor
-        block.results.push(...results)
+        block.value.has_more = has_more
+        block.value.next_cursor = next_cursor
+        block.value.results.push(...results)
+
+        await blockStorage.set(postId, block.value)
 
         return response
     }
 
-    const getBlockById = (postId: string) => {
-        return blocks.value[postId]
-    }
+    const getBlockById = (postId: string) => blockStorage.get<ListBlockChildrenResponse>(postId)
 
 
     return {

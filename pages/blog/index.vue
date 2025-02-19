@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Search } from 'lucide-vue-next'
-
-import ArticleCard from '~/components/ArticleCard.vue'
+import { Icon } from '@iconify/vue'
+import ArticleCards from '~/components/ArticleCards.vue'
 
 import {
     PATTERN_BACKGROUND_DIRECTION,
@@ -38,43 +37,36 @@ useSeoMeta({
 </script>
 
 <template>
-    <section class="max-w-4xl mx-auto w-full">
-        <div class="mt-12 flex flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-12 relative">
+    <div>
+        <section class="relative max-w-4xl mx-auto w-full">
             <PatternBackground :animate="true" :direction="PATTERN_BACKGROUND_DIRECTION.TopRight"
                 :variant="PATTERN_BACKGROUND_VARIANT.Dot"
-                class="absolute  mt-10 -z-10 h-[22rem] flex w-full items-center justify-center"
+                class="absolute  -mt-12 -z-10 h-[22rem] flex w-full items-center justify-center"
                 :speed="PATTERN_BACKGROUND_SPEED.Slow" />
+            <div class="mt-12 flex flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-12 relative">
+                <div class="text-center space-y-8">
 
-            <div class="text-center space-y-8">
-
-                <div class="mx-auto text-5xl font-bold">
-                    <h1>
-                        Blog
-                    </h1>
+                    <div class="mx-auto text-5xl font-bold">
+                        <h1>
+                            Blog
+                        </h1>
+                    </div>
+                    <h2 class="max-w-screen-sm mx-auto sm:text-lg text-muted-foreground"> {{ description }}</h2>
                 </div>
-                <h2 class="max-w-screen-sm mx-auto sm:text-lg text-muted-foreground"> {{ description }}</h2>
+            </div>
+            <div class="my-16 px-4">
+                <div class="relative w-full items-center">
+                    <Input v-model="searchText" id="search" type="text" placeholder="Search..." class="pl-12" />
+                    <span class=" absolute start-0 inset-y-0 flex items-center justify-center px-2 pl-4">
+                        <Icon icon="material-symbols:search-rounded" class="size-[1.2rem] text-muted-foreground" />
+                    </span>
+                </div>
             </div>
 
 
+            <ArticleCards :posts="filteredPosts"></ArticleCards>
 
 
-        </div>
-        <div class="my-16 px-4">
-            <div class="relative w-full items-center">
-                <Input v-model="searchText" id="search" type="text" placeholder="Search..." class="pl-12" />
-                <span class=" absolute start-0 inset-y-0 flex items-center justify-center px-2 pl-4">
-                    <Search class="size-[1.2rem] text-muted-foreground" />
-                </span>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-7 px-4 mb-20">
-            <template v-for="post in filteredPosts">
-                <ArticleCard v-if="post" :title="post.title" :image="post.image" :path="post.url" :date="post.createdAt"
-                    :tags="post.tags" />
-            </template>
-        </div>
-
-    </section>
-
+        </section>
+    </div>
 </template>

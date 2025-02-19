@@ -3,7 +3,7 @@ import { Client, isFullPage } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type { SupportedRequestInfo, SupportedRequestInit } from "@notionhq/client/build/src/fetch-types";
 
-const notion = new Client({
+export const notion = new Client({
     auth: process.env.NOTION_API_TOKEN,
     timeoutMs: 7000,
     fetch: (url: SupportedRequestInfo, init?: SupportedRequestInit) => fetch(url, init)
@@ -11,12 +11,26 @@ const notion = new Client({
 
 export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[], id: string, description: string, lastEditedTime: string }
 
+export function parsePost(result: PageObjectResponse): Post {
+    const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage } = result.properties
+
+    return {
+        tags: getProperty(Tags, "multi_select") || [],
+        image: getTextProperty(CoverImage),
+        title: getTextProperty(Title),
+        description: getTextProperty(Description),
+        url: getTextProperty(Url),
+        createdAt: getTextProperty(Published),
+        id: result.id,
+        lastEditedTime: result.last_edited_time
+    }
+}
+
 export function getBlocks(block_id: string, start_cursor: string | undefined = undefined) {
     return notion.blocks.children.list({
         block_id, page_size: 50, start_cursor
     });
 }
-
 
 export async function getPages(size?: number) {
     const response = await notion.databases.query({
@@ -36,20 +50,7 @@ export async function getPages(size?: number) {
         page_size: size
     });
 
-    return response.results.filter((result) => isFullPage(result)).map<Post>((result) => {
-        const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage } = result.properties
-
-        return {
-            tags: getProperty(Tags, "multi_select") || [],
-            image: getTextProperty(CoverImage),
-            title: getTextProperty(Title),
-            description: getTextProperty(Description),
-            url: getTextProperty(Url),
-            createdAt: getTextProperty(Published),
-            id: result.id,
-            lastEditedTime: result.last_edited_time
-        }
-    });
+    return response.results.filter((result) => isFullPage(result)).map<Post>(parsePost);
 }
 
 type TextPropertyType = "rich_text" | "title" | "url" | "created_time"

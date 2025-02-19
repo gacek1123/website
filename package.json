@@ -30,6 +30,7 @@
     "shadcn-nuxt": "0.11.3",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "unstorage": "^1.14.4",
     "vitesse-dark": "link:@shikijs/themes/vitesse-dark",
     "vitesse-light": "link:@shikijs/themes/vitesse-light",
     "vue": "latest"

@@ -7,7 +7,7 @@ import {
     PATTERN_BACKGROUND_VARIANT,
 } from "../components/PatternBackground.vue"
 
-import ArticleCard from '~/components/ArticleCard.vue';
+import ArticleCards from '~/components/ArticleCards.vue';
 
 
 const links = [
@@ -62,7 +62,7 @@ defineOgImageComponent('Image', {
 
             <PatternBackground :animate="true" :direction="PATTERN_BACKGROUND_DIRECTION.TopRight"
                 :variant="PATTERN_BACKGROUND_VARIANT.Dot"
-                class="absolute -mt-20  -z-10 h-[35rem] flex w-full items-center justify-center"
+                class="absolute -mt-20 -z-10 h-[35rem] flex w-full items-center justify-center"
                 :speed="PATTERN_BACKGROUND_SPEED.Slow" />
 
             <div class="mt-12 flex flex-col justify-center gap-4 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
@@ -117,12 +117,7 @@ defineOgImageComponent('Image', {
                     </h2>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-7 px-4">
-                    <template v-for="post in latestPosts">
-                        <ArticleCard v-if="post" :title="post.title" :image="post.image" :path="post.url"
-                            :date="post.createdAt" :tags="post.tags" />
-                    </template>
-                </div>
+                <ArticleCards :posts="latestPosts"></ArticleCards>
 
                 <div class="flex items-center justify-center my-14">
 

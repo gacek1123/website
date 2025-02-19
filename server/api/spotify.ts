@@ -28,6 +28,13 @@ const getNowPlaying = async () => {
       }
     });
 
+    if (!response) return {
+      isPlaying: false,
+      songUrl: null,
+      name: null,
+      artist: null,
+    };
+
     return {
       isPlaying: response.is_playing,
       songUrl: response.item.external_urls.spotify,
@@ -36,12 +43,8 @@ const getNowPlaying = async () => {
     }
   } catch (err) {
     console.log(err)
-    return {
-      isPlaying: false,
-      songUrl: null,
-      name: null,
-      artist: null,
-    };
+
+    return createError({})
   }
 };
 

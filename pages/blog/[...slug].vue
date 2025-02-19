@@ -1,81 +1,78 @@
 <script setup lang="ts">
-
-const { fetchPosts } = usePosts()
-const { fetchBlocks, getBlockById } = usePostBlocks()
-
-const { posts } = await fetchPosts()
-
-if (!posts || !posts.value) throw createError({
-    message: "Failed to fetch posts",
-    status: 500,
-})
-
+const { fetchBlocks } = usePostBlocks()
+const { fetchPost, posts } = usePosts();
 const route = useRoute();
+const loadMoreTrigger = ref<HTMLDivElement>()
 
-const post = posts.value.find(({ url }) => url === route.params.slug[0])
-if (!post) throw createError({
+
+const { data: post } = await useAsyncData("post", async () => {
+    return posts.value?.find(({ id }) => id === route.params.slug[0]) ?? await fetchPost(route.params.slug[0]);
+});
+
+if (!post.value) throw createError({
     message: "Post not found",
     fatal: true,
     statusCode: 404
 })
 
-await useAsyncData(() => fetchBlocks(post.id))
-
-const block = getBlockById(post.id)
-
-const loadMoreTrigger = ref<HTMLDivElement>()
+const { data: blocks } = await useAsyncData("blocks", async () =>
+    await fetchBlocks(post.value!.id)
+)
 
 onMounted(() => {
     if ("history" in window) {
         window.history.scrollRestoration = 'auto';
     }
 
-    watch(loadMoreTrigger, () => setupObserver(), { once: true })
+    watch(loadMoreTrigger, (el) => {
+        if (el) setupObserver(el);
+    }, { once: true });
 })
 
-const setupObserver = () => {
-    if (!loadMoreTrigger.value || !block.has_more) return
+const setupObserver = (target: HTMLDivElement) => {
+    if (!blocks.value?.has_more || !post.value) return;
 
-    const observer = new IntersectionObserver(async (entries) => {
-        if (entries[0].isIntersecting && block.has_more) {
-            await fetchBlocks(post.id)
+    const observer = new IntersectionObserver(async (entries, obs) => {
+        if (entries[0].isIntersecting) {
+            await fetchBlocks(post.value!.id, blocks);
+        }
+
+
+        if (!blocks.value?.has_more) {
+            obs.disconnect();
         }
     }, {
         rootMargin: "200px",
         threshold: 0.1,
-
     });
 
 
-    observer.observe(loadMoreTrigger.value);
+    observer.observe(target);
 }
 
 defineOgImageComponent('Image', {
-    title: post.title,
-    description: post.description,
-    headline: post.tags[0].name
+    title: post.value.title,
+    description: post.value.description,
+    headline: post.value.tags[0].name
 })
 
 useSeoMeta({
-    title: post.title,
-    description: post.description,
-    ogTitle: post.title,
-    ogDescription: post.description,
+    title: post.value.title,
+    description: post.value.description,
+    ogTitle: post.value.title,
+    ogDescription: post.value.description,
 
     twitterCard: 'summary_large_image'
 })
 
 useSchemaOrg([
     defineArticle({
-        headline: post.title,
-        description: post.description,
-        image: post.image,
-        datePublished: post.createdAt,
+        headline: post.value.title,
+        description: post.value.description,
+        image: post.value.image,
+        datePublished: post.value.createdAt,
     })
 ])
-
-
-
 </script>
 
 <template>
@@ -87,11 +84,11 @@ useSchemaOrg([
             <p class="text-muted-foreground mt-4">{{ useFormattedDate(post.createdAt) }}</p>
         </div>
 
-        <article class="mb-24 px-4 text-justify sm:text-start">
-            <NotionRenderer :blocks="block.results"></NotionRenderer>
+        <article class="mb-24 px-4 text-justify sm:text-start" v-if="blocks">
+            <NotionRenderer :blocks="blocks.results"></NotionRenderer>
 
             <ClientOnly>
-                <div class="mt-10" ref="loadMoreTrigger" v-if="block.has_more">
+                <div class="mt-10" ref="loadMoreTrigger" v-if="blocks.has_more">
                     Loading...
                 </div>
             </ClientOnly>

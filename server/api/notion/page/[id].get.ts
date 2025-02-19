@@ -1,16 +1,24 @@
-import { Client } from "@notionhq/client";
+import { Client, isFullPage } from "@notionhq/client";
+import { notion, parsePost, Post } from "~/lib/notion";
 
-export default cachedEventHandler((event) => {
-    const id = event.context.params?.id as string;
+export default cachedEventHandler(async (event) => {
+    const id = getRouterParam(event, "id")
+    if (!id) return createError({
+        message: `"id" is required`
+    })
 
-    const notion = new Client({
-        auth: process.env.NOTION_API_TOKEN,
-        timeoutMs: 7000
-    });
-
-    const response = notion.pages.retrieve({
+    const response = await notion.pages.retrieve({
         page_id: id
     });
 
-    return response;
+    if (isFullPage(response))
+        return parsePost(response);
+
+
+    throw createError({
+        statusCode: 404
+    })
+}, {
+    maxAge: 60 * 60 * 24,
+    swr: true,
 });

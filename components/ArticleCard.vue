@@ -3,6 +3,7 @@ import { useFormattedDate } from '~/composables/date';
 import { Badge } from './ui/badge';
 
 const props = defineProps<{
+    id: string,
     title: string,
     date: string,
     image: string,
@@ -14,7 +15,7 @@ const date = useFormattedDate(props.date)
 </script>
 
 <template>
-    <NuxtLink :to="'/blog/' + path" :aria-label="title" class="flex cursor-pointer flex-col gap-2 group">
+    <NuxtLink :to="`/blog/${id}/${path}`" :aria-label="title" class="flex cursor-pointer flex-col gap-2 group">
         <div class="relative rounded-md overflow-hidden">
             <div class="absolute z-10 top-2 left-2">
                 <Badge v-for="tag in tags" class="mr-2 text-white bg-neutral-800">
