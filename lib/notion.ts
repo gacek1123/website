@@ -58,10 +58,7 @@ type TextPropertyType = "rich_text" | "title" | "url" | "created_time"
 const allowedTypes = new Set(["rich_text", "title", "url", "created_time"])
 
 function isText(type: Property["type"]): type is TextPropertyType {
-
-    if (!allowedTypes.has(type)) return false
-
-    return true
+    return allowedTypes.has(type)
 }
 
 function getTextProperty(prop: Property): string {

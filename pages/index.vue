@@ -38,11 +38,11 @@ const links = [
     }
 ]
 
-const { fetchPosts } = usePosts()
+const { fetchPosts, latestPosts } = usePosts()
 
-const { error, status, posts } = await fetchPosts()
+await fetchPosts()
 
-const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
+
 
 const config = useSiteConfig()
 
@@ -105,9 +105,7 @@ defineOgImageComponent('Image', {
                         </ul>
                     </div>
                 </div>
-
             </div>
-
 
 
             <div>

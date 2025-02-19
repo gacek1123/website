@@ -1,3 +1,18 @@
+<script lang="ts">
+export const pages = [
+    {
+        name: "Home",
+        link: "/",
+        icon: "material-symbols:home"
+    },
+    {
+        name: "Blog",
+        link: "/blog",
+        icon: "material-symbols:book-2-rounded"
+    }
+]
+</script>
+
 <script setup lang="ts">
 import {
     NavigationMenu,
@@ -11,16 +26,8 @@ import {
 
 import { Icon } from '@iconify/vue'
 
-const pages = [
-    {
-        name: "Home",
-        link: "/"
-    },
-    {
-        name: "Blog",
-        link: "/blog"
-    }
-]
+
+const open = useState<boolean>("CommandMenu")
 </script>
 
 <template>
@@ -35,7 +42,7 @@ const pages = [
             </NavigationMenuList>
         </NavigationMenu>
         <div class="items-center gap-4 flex">
-            <Button variant="outline" aria-label="Open command menu" class="px-2">
+            <Button variant="outline" aria-label="Open command menu" class="px-2" @click="open = !open">
                 <Icon icon="material-symbols:keyboard-command-key" class="h-5 w-5" />
             </Button>
             <LayoutThemeSwitch></LayoutThemeSwitch>

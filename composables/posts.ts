@@ -28,7 +28,9 @@ export const usePosts = () => {
     }
 
 
-    return { fetchPosts, posts, fetchPost }
+    const latestPosts = computed(() => posts?.value ? posts.value.slice(0, 2) : [])
+
+    return { fetchPosts, posts, fetchPost, latestPosts }
 }
 
 

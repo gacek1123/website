@@ -38,7 +38,7 @@ useSeoMeta({
 
 <template>
     <div>
-        <section class="relative max-w-4xl mx-auto w-full">
+        <section class="relative max-w-4xl mx-auto w-full mb-20">
             <PatternBackground :animate="true" :direction="PATTERN_BACKGROUND_DIRECTION.TopRight"
                 :variant="PATTERN_BACKGROUND_VARIANT.Dot"
                 class="absolute  -mt-12 -z-10 h-[22rem] flex w-full items-center justify-center"

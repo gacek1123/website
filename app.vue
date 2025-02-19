@@ -1,6 +1,12 @@
+<script setup lang="ts">
+import CommandMenu from './components/CommandMenu.vue';
+
+</script>
+
 <template>
   <div>
-    <LayoutNavbar></LayoutNavbar>
+    <CommandMenu />
+    <LayoutNavbar />
     <NuxtPage />
   </div>
 </template>
