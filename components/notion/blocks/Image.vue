@@ -6,8 +6,8 @@ defineProps<{ image: ImageBlockObjectResponse }>();
 
 <template>
     <div>
-        <NuxtImg v-if="image.image.type === 'external'" :src="image.image.external.url"></NuxtImg>
-        <NuxtImg v-if="image.image.type === 'file'" :src="image.image.file.url"></NuxtImg>
+        <NuxtImg provider="none" v-if="image.image.type === 'external'" :src="image.image.external.url"></NuxtImg>
+        <NuxtImg provider="none" v-if="image.image.type === 'file'" :src="image.image.file.url"></NuxtImg>
     </div>
 
 </template>

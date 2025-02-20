@@ -95,6 +95,16 @@ export default defineNuxtConfig({
     }
   },
   image: {
-
+    provider: "none",
+    providers: {
+      cloudflareProvider: {
+        name: 'cloudflare-custom',
+        provider: '~/providers/cloudflare.ts',
+        options: {
+          baseURL: 'https://fszarek.me',
+          accountHash: 'gC77PfJa-d3eBOxGPxtDxw'
+        }
+      }
+    }
   }
 })

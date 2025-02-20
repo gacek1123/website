@@ -26,9 +26,11 @@ function isType<T extends BlockObjectResponse, U extends T["type"]>(
 <template>
     <div v-if="!isFullBlock(block)"></div>
     <Header v-else-if="isType(block, 'heading_1', 'heading_2', 'heading_3')" :block="block"></Header>
-    <List v-else-if="isType(block, 'bulleted_list_item', 'numbered_list_item')" :list_item="block"></List>
+    <List v-else-if="isType(block, 'bulleted_list_item', 'numbered_list_item', 'to_do')" :list_item="block"></List>
     <Paragraph v-else-if="isType(block, 'paragraph')" :paragraph="block"></Paragraph>
     <Image v-else-if="isType(block, 'image')" :image="block"></Image>
     <Code v-else-if="isType(block, 'code')" :code="block"></Code>
+    <div v-else>
 
+    </div>
 </template>

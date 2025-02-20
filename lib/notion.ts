@@ -57,11 +57,11 @@ type TextPropertyType = "rich_text" | "title" | "url" | "created_time"
 
 const allowedTypes = new Set(["rich_text", "title", "url", "created_time"])
 
-function isText(type: Property["type"]): type is TextPropertyType {
+export function isText(type: Property["type"]): type is TextPropertyType {
     return allowedTypes.has(type)
 }
 
-function getTextProperty(prop: Property): string {
+export function getTextProperty(prop: Property): string {
 
     if (!isText(prop.type)) return ""
 
@@ -83,7 +83,7 @@ type _Combine<T, K extends PropertyKey = T extends unknown ? keyof T : never> =
 
 type Combine<T> = { [K in keyof _Combine<T>]: _Combine<T>[K] }
 
-function getProperty<K extends keyof Combine<Property>>(prop: Combine<Property> | undefined, type: K) {
+export function getProperty<K extends keyof Combine<Property>>(prop: Combine<Property> | undefined, type: K) {
     if (!prop) return
 
     if (type in prop)

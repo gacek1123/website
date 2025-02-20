@@ -19,12 +19,13 @@ const date = useFormattedDate(props.date)
         <div class="relative rounded-md overflow-hidden">
             <div class="absolute z-10 top-2 left-2">
                 <Badge v-for="tag in tags" class="mr-2 text-white bg-neutral-800">
-                    {{
-                        tag.name
-                    }}</Badge>
+                    {{ tag.name }}
+                </Badge>
             </div>
             <div class="transition-colors duration-200">
-                <NuxtImg fit="cover" width="1366" :alt="`${title} article image`"
+
+                <NuxtImg provider="cloudflare-custom" fit="cover" format="webp" :alt="`${title} article image`"
+                    sizes="xs:320px xl:640"
                     class="h-64 w-full object-cover transition-transform duration-200 group-hover:scale-105"
                     :src="image" :aria-label="`${title} article image`" />
             </div>
@@ -34,7 +35,6 @@ const date = useFormattedDate(props.date)
                 <span class="bg-gradient-article dark:from-green-900 dark:to-green-800 bg-[length:0px_10px] bg-left-bottom
                     bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px]
                     group-hover:bg-[length:100%_10px]">
-
                     {{ title }}
                 </span>
             </h3>

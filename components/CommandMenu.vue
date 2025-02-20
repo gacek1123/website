@@ -35,6 +35,13 @@ watch([Meta, Ctrl], (v) => {
 function handleOpenChange() {
     open.value = !open.value
 }
+
+
+const route = useRoute()
+
+watch(route, () => {
+    open.value = false
+})
 </script>
 
 <template>
