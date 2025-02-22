@@ -1,5 +1,4 @@
 import { getBlocks } from "~/lib/notion";
-import type { H3Event } from 'h3'
 import { BlockObjectResponse, ListBlockChildrenResponse, PartialBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 

@@ -8,7 +8,7 @@ import Code from './Code.vue';
 import Callout from './Callout.vue';
 import Table from './Table.vue';
 import Separator from '~/components/ui/separator/Separator.vue';
-
+import ColumnList from './ColumnList.vue';
 import { isFullBlock } from "@notionhq/client";
 
 import { isType } from '~/lib/notion';
@@ -32,6 +32,7 @@ defineProps<{
     <Table v-else-if="isType(block, 'table')" :table="block"></Table>
     <Separator v-else-if="isType(block, 'divider')" orientation="horizontal"></Separator>
     <Callout v-else-if="isType(block, 'callout')" :callout="block"></Callout>
+    <ColumnList v-else-if="isType(block, 'column_list')" :block="block"></ColumnList>
     <div v-else>
 
     </div>

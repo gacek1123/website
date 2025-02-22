@@ -9,8 +9,6 @@ export const notion = new Client({
     fetch: (url: SupportedRequestInfo, init?: SupportedRequestInit) => fetch(url, init)
 });
 
-
-
 export type NotionColors = RichTextItemResponse['annotations']['color']
 
 export function notionColorToCss(color: NotionColors): string {
@@ -25,15 +23,15 @@ export function notionColorToCss(color: NotionColors): string {
         purple: 'color: #a855f7',
         pink: 'color: #ec4899',
         red: 'color: #ef4444',
-        gray_background: 'background-color: #6b7280',
-        brown_background: 'background-color: #9a3412',
-        orange_background: 'background-color: #f97316',
-        yellow_background: 'background-color: #eab308',
-        green_background: 'background-color: #22c55e',
-        blue_background: 'background-color: #3b82f6',
-        purple_background: 'background-color: #a855f7',
-        pink_background: 'background-color: #ec4899',
-        red_background: 'background-color: #ef4444',
+        gray_background: 'background-color: #f3f4f6',
+        brown_background: 'background-color: #fef3c7',
+        orange_background: 'background-color: #ffedd5',
+        yellow_background: 'background-color: #fef9c3',
+        green_background: 'background-color: #dcfce7',
+        blue_background: 'background-color: #dbeafe',
+        purple_background: 'background-color: #f3e8ff',
+        pink_background: 'background-color: #fce7f3',
+        red_background: 'background-color: #fee2e2',
     }
 
 

@@ -15,7 +15,7 @@ import TextRenderer from "./TextRenderer.vue";
 
 const props = defineProps<{ table: TableBlockObjectResponse }>();
 
-const { data } = useFetch('/api/notion/blocks/' + props.table.id, {
+const { data } = useLazyFetch('/api/notion/blocks/' + props.table.id, {
     transform: (input: ListBlockChildrenResponse) => {
         return input.results.filter(isFullBlock).filter(res => isType(res, 'table_row'))
     }

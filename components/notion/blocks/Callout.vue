@@ -4,15 +4,19 @@ import TextRenderer from './TextRenderer.vue';
 import { notionColorToCss } from '~/lib/notion';
 
 
-defineProps<{
+const props = defineProps<{
     callout: CalloutBlockObjectResponse
 }>()
+
+const color = notionColorToCss(props.callout.callout.color)
 </script>
 
 <template>
-    <Card :style="notionColorToCss(callout.callout.color)">
-        <CardContent>
-            <TextRenderer :text="callout.callout.rich_text"></TextRenderer>
-        </CardContent>
-    </Card>
+    <div :style="color" class="p-3 text-muted-foreground rounded-md" :class="{
+        'border': !color
+    }">
+
+        <TextRenderer :text="callout.callout.rich_text"></TextRenderer>
+
+    </div>
 </template>
