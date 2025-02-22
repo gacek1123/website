@@ -1,6 +1,6 @@
 
 import { Client, isFullPage } from "@notionhq/client";
-import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import type { BlockObjectResponse, PageObjectResponse, RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
 import type { SupportedRequestInfo, SupportedRequestInit } from "@notionhq/client/build/src/fetch-types";
 
 export const notion = new Client({
@@ -9,7 +9,29 @@ export const notion = new Client({
     fetch: (url: SupportedRequestInfo, init?: SupportedRequestInit) => fetch(url, init)
 });
 
+
+
+export function notionColorToTailwind<T = RichTextItemResponse['annotations']['color']>(color: T): string {
+    const colors: Record<keyof typeof T, string> = {
+        default: '',
+
+
+    }
+
+
+    return colors[color]
+}
+
 export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[], id: string, description: string, lastEditedTime: string }
+
+export function isType<T extends BlockObjectResponse, U extends T["type"]>(
+    block: T,
+    ...types: U[]
+): block is T & { type: U } {
+    for (let t of types) if (t === block.type) return true
+
+    return false
+}
 
 export function parsePost(result: PageObjectResponse): Post {
     const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage } = result.properties
@@ -28,7 +50,8 @@ export function parsePost(result: PageObjectResponse): Post {
 
 export function getBlocks(block_id: string, start_cursor: string | undefined = undefined) {
     return notion.blocks.children.list({
-        block_id, page_size: 50, start_cursor
+        block_id,
+        page_size: 50, start_cursor
     });
 }
 

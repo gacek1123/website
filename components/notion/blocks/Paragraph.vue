@@ -11,5 +11,5 @@ defineProps<{
     <p v-if="paragraph.paragraph.rich_text.length > 0" class="my-3 leading-loose text-muted-foreground">
         <TextRenderer :text="paragraph.paragraph.rich_text"></TextRenderer>
     </p>
-    <div v-else class="empty min-h-1"></div>
+    <div v-else class="my-5 h-px"></div>
 </template>

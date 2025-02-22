@@ -6,20 +6,17 @@ import Paragraph from './Paragraph.vue';
 import Image from './Image.vue';
 import Code from './Code.vue';
 
+import Table from './Table.vue';
 import { isFullBlock } from "@notionhq/client";
+
+import { isType } from '~/lib/notion';
+import Separator from '~/components/ui/separator/Separator.vue';
 
 defineProps<{
     block: BlockObjectResponse | PartialBlockObjectResponse
 }>()
 
-function isType<T extends BlockObjectResponse, U extends T["type"]>(
-    block: T,
-    ...types: U[]
-): block is T & { type: U } {
-    for (let t of types) if (t === block.type) return true
 
-    return false
-}
 
 </script>
 
@@ -30,6 +27,8 @@ function isType<T extends BlockObjectResponse, U extends T["type"]>(
     <Paragraph v-else-if="isType(block, 'paragraph')" :paragraph="block"></Paragraph>
     <Image v-else-if="isType(block, 'image')" :image="block"></Image>
     <Code v-else-if="isType(block, 'code')" :code="block"></Code>
+    <Table v-else-if="isType(block, 'table')" :table="block"></Table>
+    <Separator v-else-if="isType(block, 'divider')" orientation="horizontal"></Separator>
     <div v-else>
 
     </div>

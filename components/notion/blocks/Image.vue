@@ -5,9 +5,10 @@ defineProps<{ image: ImageBlockObjectResponse }>();
 </script>
 
 <template>
-    <div>
-        <NuxtImg provider="none" v-if="image.image.type === 'external'" :src="image.image.external.url"></NuxtImg>
-        <NuxtImg provider="none" v-if="image.image.type === 'file'" :src="image.image.file.url"></NuxtImg>
-    </div>
+
+    <NuxtImg class="max-w-full h-auto" v-if="image.image.type === 'external'" :src="image.image.external.url">
+    </NuxtImg>
+    <NuxtImg class="max-w-full h-auto" v-if="image.image.type === 'file'" :src="image.image.file.url"></NuxtImg>
+
 
 </template>
