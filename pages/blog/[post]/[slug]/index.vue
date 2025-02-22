@@ -4,9 +4,8 @@ const { fetchPost, posts } = usePosts();
 const route = useRoute();
 const loadMoreTrigger = ref<HTMLDivElement>()
 
-
 const { data: post } = await useAsyncData("post", async () => {
-    return posts.value?.find(({ id }) => id === route.params.slug[0]) ?? await fetchPost(route.params.slug[0]);
+    return posts.value?.find(({ id }) => id === route.params.post) ?? await fetchPost(route.params.post as string);
 });
 
 if (!post.value) throw createError({

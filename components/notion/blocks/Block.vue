@@ -9,6 +9,9 @@ import Callout from './Callout.vue';
 import Table from './Table.vue';
 import Separator from '~/components/ui/separator/Separator.vue';
 import ColumnList from './ColumnList.vue';
+import Quote from './Quote.vue';
+import Page from './Page.vue';
+
 import { isFullBlock } from "@notionhq/client";
 
 import { isType } from '~/lib/notion';
@@ -17,9 +20,6 @@ import { isType } from '~/lib/notion';
 defineProps<{
     block: BlockObjectResponse | PartialBlockObjectResponse
 }>()
-
-
-
 </script>
 
 <template>
@@ -33,7 +33,8 @@ defineProps<{
     <Separator v-else-if="isType(block, 'divider')" orientation="horizontal"></Separator>
     <Callout v-else-if="isType(block, 'callout')" :callout="block"></Callout>
     <ColumnList v-else-if="isType(block, 'column_list')" :block="block"></ColumnList>
+    <Quote v-else-if="isType(block, 'quote')" :block="block"></Quote>
+    <Page v-else-if="isType(block, 'child_page')" :block="block"></Page>
     <div v-else>
-
     </div>
 </template>

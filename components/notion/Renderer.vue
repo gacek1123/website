@@ -10,12 +10,10 @@ defineProps<{
 
 <template>
     <div>
-
         <TransitionGroup enter-active-class="duration-500 ease-out" enter-from-class="transform blur-sm"
             enter-to-class="blur-none" leave-active-class="duration-200 ease-in" leave-from-class="blur-none"
             leave-to-class="blur-sm">
             <Block v-for="block in blocks" :key="block.id" :block="block"></Block>
         </TransitionGroup>
-
     </div>
 </template>

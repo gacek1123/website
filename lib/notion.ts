@@ -34,7 +34,6 @@ export function notionColorToCss(color: NotionColors): string {
         red_background: 'background-color: #fee2e2',
     }
 
-
     return colors[color]
 }
 
