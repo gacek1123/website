@@ -11,11 +11,29 @@ export const notion = new Client({
 
 
 
-export function notionColorToTailwind<T = RichTextItemResponse['annotations']['color']>(color: T): string {
-    const colors: Record<keyof typeof T, string> = {
+export type NotionColors = RichTextItemResponse['annotations']['color']
+
+export function notionColorToCss(color: NotionColors): string {
+    const colors: Record<NotionColors, string> = {
         default: '',
-
-
+        gray: 'color: #6b7280',
+        brown: 'color: #9a3412',
+        orange: 'color: #f97316',
+        yellow: 'color: #eab308',
+        green: 'color: #22c55e',
+        blue: 'color: #3b82f6',
+        purple: 'color: #a855f7',
+        pink: 'color: #ec4899',
+        red: 'color: #ef4444',
+        gray_background: 'background-color: #6b7280',
+        brown_background: 'background-color: #9a3412',
+        orange_background: 'background-color: #f97316',
+        yellow_background: 'background-color: #eab308',
+        green_background: 'background-color: #22c55e',
+        blue_background: 'background-color: #3b82f6',
+        purple_background: 'background-color: #a855f7',
+        pink_background: 'background-color: #ec4899',
+        red_background: 'background-color: #ef4444',
     }
 
 

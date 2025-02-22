@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table'
 import { isFullBlock } from "@notionhq/client";
 import { isType } from '~/lib/notion';
-import Text from "./Text.vue";
+import TextRenderer from "./TextRenderer.vue";
 
 const props = defineProps<{ table: TableBlockObjectResponse }>();
 
@@ -27,14 +27,14 @@ const { data } = useFetch('/api/notion/blocks/' + props.table.id, {
         <TableHeader v-if="props.table.table.has_row_header">
             <TableRow>
                 <TableHead v-for="cell in data[0].table_row.cells">
-                    <Text v-for="text in cell" :text="text"></Text>
+                    <TextRenderer :text="cell"></TextRenderer>
                 </TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
             <TableRow v-for="row in data.slice(1)">
                 <TableCell v-for="cell in row.table_row.cells">
-                    <Text v-for="text in cell" :text="text"></Text>
+                    <TextRenderer :text="cell"></TextRenderer>
                 </TableCell>
             </TableRow>
         </TableBody>

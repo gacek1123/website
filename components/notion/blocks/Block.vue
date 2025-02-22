@@ -5,12 +5,14 @@ import List from './List.vue';
 import Paragraph from './Paragraph.vue';
 import Image from './Image.vue';
 import Code from './Code.vue';
-
+import Callout from './Callout.vue';
 import Table from './Table.vue';
+import Separator from '~/components/ui/separator/Separator.vue';
+
 import { isFullBlock } from "@notionhq/client";
 
 import { isType } from '~/lib/notion';
-import Separator from '~/components/ui/separator/Separator.vue';
+
 
 defineProps<{
     block: BlockObjectResponse | PartialBlockObjectResponse
@@ -29,6 +31,7 @@ defineProps<{
     <Code v-else-if="isType(block, 'code')" :code="block"></Code>
     <Table v-else-if="isType(block, 'table')" :table="block"></Table>
     <Separator v-else-if="isType(block, 'divider')" orientation="horizontal"></Separator>
+    <Callout v-else-if="isType(block, 'callout')" :callout="block"></Callout>
     <div v-else>
 
     </div>
