@@ -7,8 +7,8 @@ const loadMoreTrigger = ref<HTMLDivElement>()
 
 definePageMeta({
     alias: [
-        '/blog/:post/:slug',
-        '/page/:post/:slug'
+        '/blog/:post()/:slug(.*)*',
+        '/page/:post()/:slug(.*)*'
     ]
 })
 

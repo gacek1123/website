@@ -5,7 +5,7 @@ defineProps<{ block: ChildPageBlockObjectResponse }>();
 </script>
 
 <template>
-    <NuxtLink class="border-b hover:text-foreground transition-colors text-muted-foreground"
+    <NuxtLink class="border-b hover:text-foreground transition-colors text-green-600 font-medium"
         :to="`/page/${block.id}/${block.child_page.title}`">
         {{ block.child_page.title }}
     </NuxtLink>
