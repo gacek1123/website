@@ -37,7 +37,7 @@ export function notionColorToCss(color: NotionColors): string {
     return colors[color]
 }
 
-export type Post = { title: string, image: string, url: string, createdAt: string, tags: any[], id: string, description: string, lastEditedTime: string }
+export type Post = { title: string, image?: string, url?: string, createdAt: string, tags: any[], id: string, description?: string, lastEditedTime: string }
 
 export function isType<T extends BlockObjectResponse, U extends T["type"]>(
     block: T,
@@ -49,15 +49,15 @@ export function isType<T extends BlockObjectResponse, U extends T["type"]>(
 }
 
 export function parsePost(result: PageObjectResponse): Post {
-    const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage } = result.properties
+    const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage, title } = result.properties
 
     return {
-        tags: getProperty(Tags, "multi_select") || [],
+        tags: getProperty(Tags, "multi_select") ?? [],
         image: getTextProperty(CoverImage),
-        title: getTextProperty(Title),
+        title: getTextProperty(Title ?? title) || '',
         description: getTextProperty(Description),
         url: getTextProperty(Url),
-        createdAt: getTextProperty(Published),
+        createdAt: getTextProperty(Published) ?? result.created_time,
         id: result.id,
         lastEditedTime: result.last_edited_time
     }
@@ -99,9 +99,10 @@ export function isText(type: Property["type"]): type is TextPropertyType {
     return allowedTypes.has(type)
 }
 
-export function getTextProperty(prop: Property): string {
+export function getTextProperty(prop: Property | undefined): string | undefined {
+    if (!prop) return
 
-    if (!isText(prop.type)) return ""
+    if (!isText(prop.type)) return
 
     const res = getProperty(prop, prop.type)
 

@@ -5,7 +5,6 @@ defineProps<{
     link: string,
     icon?: string,
     name: string,
-
 }>()
 </script>
 

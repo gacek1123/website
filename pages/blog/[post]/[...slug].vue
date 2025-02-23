@@ -4,9 +4,17 @@ const { fetchPost, posts } = usePosts();
 const route = useRoute();
 const loadMoreTrigger = ref<HTMLDivElement>()
 
-const { data: post } = await useAsyncData("post", async () => {
-    return posts.value?.find(({ id }) => id === route.params.post) ?? await fetchPost(route.params.post as string);
-});
+
+definePageMeta({
+    alias: [
+        '/blog/:post/:slug',
+        '/page/:post/:slug'
+    ]
+})
+
+const { data: post } = await useAsyncData("post", async () =>
+    posts.value?.find(({ id }) => id === route.params.post) ?? await fetchPost(route.params.post as string)
+);
 
 if (!post.value) throw createError({
     message: "Post not found",
@@ -52,7 +60,7 @@ const setupObserver = (target: HTMLDivElement) => {
 defineOgImageComponent('Image', {
     title: post.value.title,
     description: post.value.description,
-    headline: post.value.tags[0].name
+    headline: post.value.tags[0]?.name ?? route.path
 })
 
 useSeoMeta({
@@ -78,7 +86,7 @@ useSchemaOrg([
 
     <div class="mx-auto w-full max-w-4xl" v-if="post">
 
-        <div class="mt-12 lg:py-12 px-4  ">
+        <div class="mt-12 lg:py-12 px-4">
             <h1 class="text-4xl font-bold">{{ post.title }}</h1>
             <p class="text-muted-foreground mt-4">{{ useFormattedDate(post.createdAt) }}</p>
         </div>

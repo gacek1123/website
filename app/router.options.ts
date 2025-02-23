@@ -10,5 +10,5 @@ export default <RouterConfig>{
             };
         }
     },
-    scrollBehaviorType: 'auto'
+    scrollBehaviorType: 'auto',
 };

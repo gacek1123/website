@@ -21,8 +21,8 @@ export default defineNuxtConfig({
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
 
-  nitro: {
-  },
+
+
   hub: {
     cache: true,
     kv: true
