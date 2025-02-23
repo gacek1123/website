@@ -20,9 +20,6 @@ export default defineNuxtConfig({
   shiki: {
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
-
-
-
   hub: {
     cache: true,
     kv: true
