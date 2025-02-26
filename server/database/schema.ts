@@ -1,8 +1,8 @@
 import { sqliteTable, text, integer, index, AnySQLiteColumn, foreignKey } from 'drizzle-orm/sqlite-core'
 
 export const comments = sqliteTable('comments', {
-    id: integer('id').notNull().primaryKey({ autoIncrement: true }),
-    userId: integer('user_id').notNull(),
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: text('user_id').notNull(),
     postId: text('post_id').notNull().unique(),
     upvoteCount: integer('upvote_count').default(0),
     downvoteCount: integer('downvote_count').default(0),

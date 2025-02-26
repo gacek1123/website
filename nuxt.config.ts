@@ -1,4 +1,3 @@
-import { getPages } from "./lib/notion"
 import { definePerson } from 'nuxt-schema-org/schema'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -22,9 +21,9 @@ export default defineNuxtConfig({
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
   hub: {
+    database: true,
     cache: true,
     kv: true,
-    database: true
   },
   build: {
     transpile: ['shiki'],
@@ -37,7 +36,6 @@ export default defineNuxtConfig({
     defaultLocale: "en",
     description: "High school student from Poland, passionate about gaining knowledge and solving new problems while working on projects."
   },
-
 
   schemaOrg: {
     identity: definePerson({
@@ -88,11 +86,13 @@ export default defineNuxtConfig({
      */
     componentDir: './components/ui'
   },
+
   googleFonts: {
     families: {
       Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
     }
   },
+
   image: {
     provider: "none",
     providers: {
@@ -110,9 +110,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     oauth: {
       github: {
-        clientId: '683946d47c799d190f58 ',
+        clientId: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET
       }
     }
   }
+
 })

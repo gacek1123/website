@@ -15,6 +15,13 @@
       "when": 1740600092662,
       "tag": "0001_chilly_expediter",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1740602072886,
+      "tag": "0002_silent_post",
+      "breakpoints": true
     }
   ]
 }
