@@ -5,14 +5,6 @@ declare module '#auth-utils' {
         name: string,
         image: string
     }
-
-    interface UserSession {
-
-    }
-
-    interface SecureSessionData {
-
-    }
 }
 
 export { }
