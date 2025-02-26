@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ColumnListBlockObjectResponse, ListBlockChildrenResponse } from '@notionhq/client/build/src/api-endpoints';
 import { isFullBlock } from '@notionhq/client';
-import { isType } from '~/lib/notion';
+import { isType } from '~/shared/notion/utils';
 import Column from './Column.vue';
 
 const props = defineProps<{

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RichTextItemResponse } from '@notionhq/client/build/src/api-endpoints';
-import { notionColorToCss } from '~/lib/notion';
+import { notionColorToCss } from '~/shared/notion/utils';
 
 const props = defineProps<{
     text: RichTextItemResponse

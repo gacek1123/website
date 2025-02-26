@@ -14,7 +14,7 @@ import Page from './Page.vue';
 
 import { isFullBlock } from "@notionhq/client";
 
-import { isType } from '~/lib/notion';
+import { isType } from '~/shared/notion/utils';
 
 
 defineProps<{

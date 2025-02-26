@@ -1,13 +1,4 @@
-
-import { Client, isFullPage } from "@notionhq/client";
 import type { BlockObjectResponse, PageObjectResponse, RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
-import type { SupportedRequestInfo, SupportedRequestInit } from "@notionhq/client/build/src/fetch-types";
-
-export const notion = new Client({
-    auth: process.env.NOTION_API_TOKEN,
-    timeoutMs: 7000,
-    fetch: (url: SupportedRequestInfo, init?: SupportedRequestInit) => fetch(url, init)
-});
 
 export type NotionColors = RichTextItemResponse['annotations']['color']
 
@@ -32,12 +23,11 @@ export function notionColorToCss(color: NotionColors): string {
         purple_background: 'background-color: #f3e8ff',
         pink_background: 'background-color: #fce7f3',
         red_background: 'background-color: #fee2e2',
+        default_background: ''
     }
 
     return colors[color]
 }
-
-export type Post = { title: string, image?: string, url?: string, createdAt: string, tags: any[], id: string, description?: string, lastEditedTime: string }
 
 export function isType<T extends BlockObjectResponse, U extends T["type"]>(
     block: T,
@@ -46,49 +36,6 @@ export function isType<T extends BlockObjectResponse, U extends T["type"]>(
     for (let t of types) if (t === block.type) return true
 
     return false
-}
-
-export function parsePost(result: PageObjectResponse): Post {
-    const { Title, Description, Tags, URL: Url, Published, ["Cover image"]: CoverImage, title } = result.properties
-
-    return {
-        tags: getProperty(Tags, "multi_select") ?? [],
-        image: getTextProperty(CoverImage),
-        title: getTextProperty(Title ?? title) || '',
-        description: getTextProperty(Description),
-        url: getTextProperty(Url),
-        createdAt: getTextProperty(Published) ?? result.created_time,
-        id: result.id,
-        lastEditedTime: result.last_edited_time
-    }
-}
-
-export function getBlocks(block_id: string, start_cursor: string | undefined = undefined) {
-    return notion.blocks.children.list({
-        block_id,
-        page_size: 50, start_cursor
-    });
-}
-
-export async function getPages(size?: number) {
-    const response = await notion.databases.query({
-        database_id: process.env.NOTION_POST_DATABASE as string,
-        filter: {
-            property: "Status",
-            status: {
-                equals: "Published"
-            }
-        },
-        sorts: [
-            {
-                property: "Published",
-                direction: "descending"
-            }
-        ],
-        page_size: size
-    });
-
-    return response.results.filter((result) => isFullPage(result)).map<Post>(parsePost);
 }
 
 type TextPropertyType = "rich_text" | "title" | "url" | "created_time"

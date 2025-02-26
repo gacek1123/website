@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { QuoteBlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import TextRenderer from './TextRenderer.vue';
-import { notionColorToCss } from '~/lib/notion';
+import { notionColorToCss } from '~/shared/notion/utils';
 
 
 const props = defineProps<{

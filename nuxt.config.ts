@@ -15,14 +15,16 @@ export default defineNuxtConfig({
     '@nuxtjs/seo',
     'nuxt-og-image',
     '@nuxthub/core',
-    'nuxt-shiki'
+    'nuxt-shiki',
+    'nuxt-auth-utils'
   ],
   shiki: {
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
   hub: {
     cache: true,
-    kv: true
+    kv: true,
+    database: true
   },
   build: {
     transpile: ['shiki'],
@@ -101,6 +103,15 @@ export default defineNuxtConfig({
           baseURL: 'https://fszarek.me',
           accountHash: 'gC77PfJa-d3eBOxGPxtDxw'
         }
+      }
+    }
+  },
+
+  runtimeConfig: {
+    oauth: {
+      github: {
+        clientId: '683946d47c799d190f58 ',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET
       }
     }
   }

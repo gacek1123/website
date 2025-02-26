@@ -1,5 +1,5 @@
 import { Client, isFullPage } from "@notionhq/client";
-import { notion, parsePost, Post } from "~/lib/notion";
+import { parsePost, Post } from '~/shared/notion/post';
 
 export default cachedEventHandler(async (event) => {
     const id = getRouterParam(event, "id")

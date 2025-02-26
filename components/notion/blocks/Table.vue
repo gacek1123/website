@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type BlockObjectResponse, type ListBlockChildrenResponse, type TableBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { type ListBlockChildrenResponse, type TableBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import {
     Table,
     TableBody,
@@ -10,7 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { isFullBlock } from "@notionhq/client";
-import { isType } from '~/lib/notion';
+import { isType } from '~/shared/notion/utils';
 import TextRenderer from "./TextRenderer.vue";
 
 const props = defineProps<{ table: TableBlockObjectResponse }>();
