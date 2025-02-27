@@ -12,6 +12,5 @@ CREATE TABLE `comments` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `comments_post_id_unique` ON `comments` (`post_id`);--> statement-breakpoint
-CREATE INDEX `post_id_idx` ON `comments` (`post_id`);--> statement-breakpoint
 CREATE INDEX `user_id_idx` ON `comments` (`user_id`);--> statement-breakpoint
 DROP TABLE `todos`;

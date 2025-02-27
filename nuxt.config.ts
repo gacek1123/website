@@ -1,5 +1,8 @@
 import { definePerson } from 'nuxt-schema-org/schema'
 
+
+
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -17,6 +20,13 @@ export default defineNuxtConfig({
     'nuxt-shiki',
     'nuxt-auth-utils'
   ],
+
+  nitro: {
+    experimental: {
+      openAPI: true
+    }
+  },
+
   shiki: {
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
@@ -49,6 +59,7 @@ export default defineNuxtConfig({
 
   },
   ogImage: {
+    enabled: false,
     debug: true,
     fonts: ["Inter:400", 'Inter:500', "Inter:700"],
     defaults: {

@@ -5,7 +5,7 @@ export default defineOAuthGitHubEventHandler({
     async onSuccess(event, { user, tokens }) {
         await setUserSession(event, {
             user: {
-                id: user.id,
+                id: user.id.toString(),
                 name: user.login,
                 image: user.avatar_url
             }
