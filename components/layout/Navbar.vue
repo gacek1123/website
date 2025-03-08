@@ -45,7 +45,7 @@ const open = useState<boolean>("CommandMenu")
             <Button variant="outline" aria-label="Open command menu" class="px-2" @click="open = !open">
                 <Icon icon="material-symbols:keyboard-command-key" class="h-5 w-5" />
             </Button>
-            <LayoutThemeSwitch></LayoutThemeSwitch>
+            <ThemeSwitch></ThemeSwitch>
         </div>
     </header>
 

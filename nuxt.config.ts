@@ -18,7 +18,6 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     'nuxt-shiki',
     'nuxt-auth-utils',
-    '@pinia/nuxt'
   ],
 
   nitro: {

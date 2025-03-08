@@ -3,10 +3,18 @@ import type { Post } from "~/shared/notion/post"
 import { FetchError } from 'ofetch'
 import type { AsyncDataRequestStatus } from "#app"
 
+
+export const usePostId = () => {
+    const route = useRoute();
+    const postId = route.params.post as string
+
+    return postId
+}
+
 export const usePosts = () => {
     const posts = useState<Post[]>("posts", () => [])
 
-    const fetchPosts = async (): Promise<{ posts?: Ref<Post[]>, error?: Ref<FetchError | null>, status?: Ref<AsyncDataRequestStatus> }> => {
+    async function fetchPosts(): Promise<{ posts?: Ref<Post[]>, error?: Ref<FetchError | null>, status?: Ref<AsyncDataRequestStatus> }> {
         if (posts.value.length) return { posts }
 
         const { data, error, status } = await useFetch("/api/notion/query-database")
@@ -19,7 +27,7 @@ export const usePosts = () => {
     }
 
 
-    const fetchPost = async (postId: string) => {
+    async function fetchPost(postId: string) {
         const data = await useFetch<Post>("/api/notion/page/" + postId, {
             getCachedData(key, nuxt) {
                 return nuxt.isHydrating ? nuxt.payload.data[key] : findPost(postId)
@@ -64,7 +72,7 @@ export const usePostBlocks = () => {
     }
 
     function usePostBlocksData(postId: string) {
-        return computed(() => blocksCache.value[postId] ?? { hasMore: true, blocks: [], nextCursor: null });
+        return blocksCache.value[postId] ?? { hasMore: true, blocks: [], nextCursor: null }
     }
 
     return {

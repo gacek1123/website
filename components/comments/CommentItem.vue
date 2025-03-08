@@ -8,33 +8,35 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-defineProps<{
+const props = defineProps<{
     content: string,
-    createdAt: string,
-    id: string,
+    createdAt: Date,
+    id: number,
     username: string
     userAvatar: string
-    repliedCommentId: string | null
+    repliedCommentId: number | null
     upvoteCount: number
     downvoteCount: number
     replies: number
 }>()
+
+const createdAt = useFormattedDate(props.createdAt)
 </script>
 
 <template>
     <div class="flex items-start gap-4">
-        <Avatar class="shrink-0">
+        <Avatar class="shrink-0 w-7 h-7">
             <AvatarImage :src="userAvatar" alt="user avatar" />
             <AvatarFallback>CN</AvatarFallback>
         </Avatar>
 
 
-        <div class="grid gap-3">
+        <div class="grid gap-3 flex-1">
             <div class="flex items-center gap-2">
                 <div class="font-medium">{{ username }}</div>
-                <div class="text-xs text-muted-foreground">{{ createdAt }}</div>
+                <div class="text-sm text-muted-foreground">{{ createdAt }}</div>
             </div>
-            <div class="text-muted-foreground">
+            <div class="text-muted-foreground text-sm">
                 {{ content }}
             </div>
 

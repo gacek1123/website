@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import CommentForm from '~/components/comments/Form.vue'
+import CommentForm from '~/components/comments/CommentForm.vue'
+import CommentList from '~/components/comments/CommentList.vue'
+
 import { useFormattedDate } from '~/composables/useDate';
 
 
 const { fetchPost } = usePosts();
-const route = useRoute();
-
 
 definePageMeta({
     alias: [
@@ -14,7 +14,7 @@ definePageMeta({
     ]
 })
 
-const postId = route.params.post as string
+const postId = usePostId()
 
 const { data: post } = await fetchPost(postId)
 
@@ -30,13 +30,13 @@ useAsyncData(() => fetchBlocks(postId))
 
 const blocks = usePostBlocksData(postId);
 
-const { loadMoreTrigger } = useScrollLoader(() => fetchBlocks(postId), () => blocks.value.hasMore)
+const { loadMoreTrigger } = useScrollLoader(() => fetchBlocks(postId), () => blocks.hasMore)
 
 
 defineOgImageComponent('Image', {
     title: post.value.title,
     description: post.value.description,
-    headline: post.value.tags[0]?.name ?? route.path
+    headline: post.value.tags[0]?.name ?? "nei's blog"
 })
 
 useSeoMeta({
@@ -60,14 +60,14 @@ useSchemaOrg([
 
 <template>
 
-    <div class="mx-auto w-full max-w-4xl" v-if="post">
+    <div class="mx-auto w-full max-w-4xl px-4" v-if="post">
 
-        <div class="mt-12 lg:py-12 px-4">
+        <div class="mt-12 lg:py-12 ">
             <h1 class="text-4xl font-bold">{{ post.title }}</h1>
             <p class="text-muted-foreground mt-4">{{ useFormattedDate(post.createdAt) }}</p>
         </div>
 
-        <article class="mb-24 px-4 text-justify sm:text-start">
+        <article class="mb-24 text-justify sm:text-start">
             <NotionRenderer :blocks="blocks.blocks"></NotionRenderer>
 
             <ClientOnly>
@@ -82,6 +82,11 @@ useSchemaOrg([
 
 
             <CommentForm />
+        </div>
+
+        <div class="mb-10">
+
+            <CommentList></CommentList>
         </div>
     </div>
 </template>

@@ -19,7 +19,7 @@ const { latestPosts } = usePosts()
 
 const open = useState("CommandMenu", () => false)
 
-const { Meta, Ctrl } = useMagicKeys({
+const { Meta } = useMagicKeys({
     passive: false,
     onEventFired(e) {
         if (e.key === 'j' && (e.metaKey || e.ctrlKey))
@@ -27,8 +27,8 @@ const { Meta, Ctrl } = useMagicKeys({
     },
 })
 
-watch([Meta, Ctrl], (v) => {
-    if (v[0] || v[1])
+watch([Meta], (v) => {
+    if (v[0])
         handleOpenChange()
 })
 

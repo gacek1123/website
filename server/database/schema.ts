@@ -3,8 +3,8 @@ import { sqliteTable, text, integer, index, AnySQLiteColumn } from 'drizzle-orm/
 export const comments = sqliteTable('comments', {
     id: integer('id').primaryKey({ autoIncrement: true }),
     postId: text('post_id').notNull(),
-    upvoteCount: integer('upvote_count').default(0),
-    downvoteCount: integer('downvote_count').default(0),
+    upvoteCount: integer('upvote_count').notNull().default(0),
+    downvoteCount: integer('downvote_count').notNull().default(0),
     content: text('content', { length: 500 }).notNull(),
     repliedCommentId: integer('replied_comment_id').references((): AnySQLiteColumn => comments.id),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
