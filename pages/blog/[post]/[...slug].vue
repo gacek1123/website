@@ -1,8 +1,10 @@
 <script setup lang="ts">
-const { fetchBlocks } = usePostBlocks()
-const { fetchPost, posts } = usePosts();
+import CommentForm from '~/components/comments/Form.vue'
+import { useFormattedDate } from '~/composables/useDate';
+
+
+const { fetchPost } = usePosts();
 const route = useRoute();
-const loadMoreTrigger = ref<HTMLDivElement>()
 
 
 definePageMeta({
@@ -12,9 +14,9 @@ definePageMeta({
     ]
 })
 
-const { data: post } = await useAsyncData("post", async () =>
-    posts.value?.find(({ id }) => id === route.params.post) ?? await fetchPost(route.params.post as string)
-);
+const postId = route.params.post as string
+
+const { data: post } = await fetchPost(postId)
 
 if (!post.value) throw createError({
     message: "Post not found",
@@ -22,40 +24,14 @@ if (!post.value) throw createError({
     statusCode: 404
 })
 
-const { data: blocks } = await useAsyncData("blocks", async () =>
-    await fetchBlocks(post.value!.id)
-)
+const { fetchBlocks, usePostBlocksData } = usePostBlocks()
 
-onMounted(() => {
-    if ("history" in window) {
-        window.history.scrollRestoration = 'auto';
-    }
+useAsyncData(() => fetchBlocks(postId))
 
-    watch(loadMoreTrigger, (el) => {
-        if (el) setupObserver(el);
-    }, { once: true });
-})
+const blocks = usePostBlocksData(postId);
 
-const setupObserver = (target: HTMLDivElement) => {
-    if (!blocks.value?.has_more || !post.value) return;
+const { loadMoreTrigger } = useScrollLoader(() => fetchBlocks(postId), () => blocks.value.hasMore)
 
-    const observer = new IntersectionObserver(async (entries, obs) => {
-        if (entries[0].isIntersecting) {
-            await fetchBlocks(post.value!.id, blocks);
-        }
-
-
-        if (!blocks.value?.has_more) {
-            obs.disconnect();
-        }
-    }, {
-        rootMargin: "200px",
-        threshold: 0.1,
-    });
-
-
-    observer.observe(target);
-}
 
 defineOgImageComponent('Image', {
     title: post.value.title,
@@ -91,14 +67,21 @@ useSchemaOrg([
             <p class="text-muted-foreground mt-4">{{ useFormattedDate(post.createdAt) }}</p>
         </div>
 
-        <article class="mb-24 px-4 text-justify sm:text-start" v-if="blocks">
-            <NotionRenderer :blocks="blocks.results"></NotionRenderer>
+        <article class="mb-24 px-4 text-justify sm:text-start">
+            <NotionRenderer :blocks="blocks.blocks"></NotionRenderer>
 
             <ClientOnly>
-                <div class="mt-10" ref="loadMoreTrigger" v-if="blocks.has_more">
+                <div class="mt-10" ref="loadMoreTrigger" v-if="blocks.hasMore">
                     Loading...
                 </div>
             </ClientOnly>
         </article>
+
+
+        <div class="mb-20">
+
+
+            <CommentForm />
+        </div>
     </div>
 </template>

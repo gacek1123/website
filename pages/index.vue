@@ -42,8 +42,6 @@ const { fetchPosts, latestPosts } = usePosts()
 
 await fetchPosts()
 
-
-
 const config = useSiteConfig()
 
 const route = useRoute()

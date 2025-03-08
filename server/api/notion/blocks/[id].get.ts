@@ -1,4 +1,4 @@
-
+import type { H3Event } from 'h3'
 import { BlockObjectResponse, ListBlockChildrenResponse, PartialBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     let blocks: Array<PartialBlockObjectResponse | BlockObjectResponse> = []
 
     do {
-        const data = await cachedBlocks(pageId, startCursor)
+        const data = await cachedBlocks(event, pageId, startCursor)
 
         blocks.push(...data.results)
         hasMore = data.has_more
@@ -30,18 +30,23 @@ export default defineEventHandler(async (event) => {
     } as ListBlockChildrenResponse
 });
 
-const cachedBlocks = defineCachedFunction(async (pageId: string, startCursor: string | undefined) => {
-    const blocks = await getBlocks(pageId, startCursor)
 
+const cacheKey = (pageId: string, startCursor: string | undefined) => `${pageId}${startCursor ? `-${startCursor}` : ''}`
+
+const cachedBlocks = defineCachedFunction(async (event: H3Event, pageId: string, startCursor: string | undefined) => {
+    const blocks = await getBlocks(pageId, startCursor)
     return blocks
 }, {
     maxAge: 60 * 60 * 24,
     swr: true,
     name: 'postBlocks',
-    getKey: (pageId: string, startCursor: string | undefined) => `${pageId}${startCursor ? `-${startCursor}` : ''}`
+    shouldBypassCache() {
+        return import.meta.dev ?? false
+    },
+    getKey: (event: H3Event, pageId: string, startCursor: string | undefined) => cacheKey(pageId, startCursor)
 })
 
 
 const isCached = (pageId: string, startCursor: string | undefined) => {
-    return useStorage('cache').hasItem(`nitro:functions:postBlocks:${`${pageId}${startCursor ? `-${startCursor}` : ''}`}.json`)
+    return useStorage('cache').hasItem(`nitro:functions:postBlocks:${cacheKey(pageId, startCursor)}.json`)
 }

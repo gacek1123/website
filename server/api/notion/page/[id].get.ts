@@ -21,7 +21,5 @@ export default cachedEventHandler(async (event) => {
 }, {
     maxAge: 60 * 60 * 24,
     swr: true,
-    shouldBypassCache(args_0) {
-        return import.meta.dev ?? false
-    },
+
 });

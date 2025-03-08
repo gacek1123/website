@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useFormattedDate } from '~/composables/date';
+import { useFormattedDate } from '~/composables/useDate';
 import { Badge } from './ui/badge';
 
 const props = defineProps<{
     id: string,
     title: string,
     date: string,
-    image: string,
-    path: string,
+    image?: string,
+    path?: string,
     tags: { name: string, color: string }[]
 }>()
 

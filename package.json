@@ -19,6 +19,7 @@
     "@nuxtjs/google-fonts": "3.2.0",
     "@nuxtjs/seo": "^2.1.1",
     "@tanstack/vue-table": "^8.21.2",
+    "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^12.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -38,9 +39,11 @@
     "tailwindcss-animate": "^1.0.7",
     "ufo": "^1.5.4",
     "unstorage": "^1.14.4",
+    "vee-validate": "^4.15.0",
     "vitesse-dark": "link:@shikijs/themes/vitesse-dark",
     "vitesse-light": "link:@shikijs/themes/vitesse-light",
-    "vue": "latest"
+    "vue": "latest",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@iconify-json/radix-icons": "^1.2.2",

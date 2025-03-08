@@ -1,7 +1,6 @@
 import { definePerson } from 'nuxt-schema-org/schema'
 
-
-
+const isProduction = () => process.env.NODE_ENV === 'production'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -18,12 +17,13 @@ export default defineNuxtConfig({
     'nuxt-og-image',
     '@nuxthub/core',
     'nuxt-shiki',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    '@pinia/nuxt'
   ],
 
   nitro: {
     experimental: {
-      openAPI: true
+      openAPI: !isProduction()
     }
   },
 
@@ -59,7 +59,7 @@ export default defineNuxtConfig({
 
   },
   ogImage: {
-    enabled: false,
+    enabled: isProduction(),
     debug: true,
     fonts: ["Inter:400", 'Inter:500', "Inter:700"],
     defaults: {
