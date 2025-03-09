@@ -1,22 +1,38 @@
 import type { Comment as C } from "~/server/utils/drizzle"
 
-type Comment = C & { replies: number }
+export type Comment = C & { replies: number, createdAt: string }
 
 export const useComments = () => {
 
     const commentsCache = useState<Record<string, Comment[]>>('comments', () => ({}))
 
+    function isReply(comment: Comment): boolean {
+        return comment.repliedCommentId !== null
+    }
 
     function getComments(postId: string) {
-        return commentsCache.value[postId] ?? []
+        return commentsCache.value[postId].filter((comment) => !isReply(comment)) ?? []
+    }
+
+    function getReplies(postId: string, commentId: number) {
+        return commentsCache.value[postId].filter(comment => comment.repliedCommentId === commentId)
+    }
+
+    const fetchReplies = async (commentId: number, postId: string) => {
+        const data = await $fetch<Comment[]>(`/api/comments/${commentId}/reply`)
+
+        cacheComments(postId, ...data)
     }
 
     async function fetchComments(postId: string) {
-        const { data } = await useFetch<Comment[]>(`/api/comments/${postId}`)
+        const { data } = await useAsyncData<Comment[]>('comments', async () => {
 
-        if (data.value) {
-            cacheComments(postId, ...data.value)
-        }
+            const data = await $fetch<Comment[]>(`/api/comments/${postId}`)
+
+            cacheComments(postId, ...data)
+
+            return data
+        })
 
         return data
     }
@@ -40,14 +56,28 @@ export const useComments = () => {
         })
 
         cacheComments(postId, data)
+    }
 
+    async function addReply(content: string, commentId: number, postId: string) {
+        const data = await $fetch<Comment>(`/api/comments/${commentId}/reply`, {
+            method: 'post',
+            body: {
+                content,
+                postId,
+            }
+        })
+
+        cacheComments(postId, data)
     }
 
 
     return {
         fetchComments,
         getComments,
-        addComment
+        addComment,
+        addReply,
+        getReplies,
+        fetchReplies
     }
 
 }

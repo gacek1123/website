@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { count, eq, getTableColumns, isNull } from 'drizzle-orm'
 import { useValidatedParams, useValidatedQuery, z, zh } from 'h3-zod'
 
 
@@ -34,5 +34,18 @@ export default defineEventHandler(async (event) => {
         offset: z.number().optional().default(0)
     })
 
-    return await useDrizzle().select().from(tables.comments).where(eq(tables.comments.repliedCommentId, commentId)).limit(limit).offset(offset).all()
+
+    return await useDrizzle()
+        .select({
+            ...getTableColumns(tables.comments),
+            replies: count(tables.commentReplies.commentId)
+        })
+        .from(tables.comments)
+        .leftJoin(tables.commentReplies, eq(tables.commentReplies.referenceId, tables.comments.id))
+        .groupBy(tables.comments.id)
+        .where(and(eq(tables.comments.repliedCommentId, commentId)))
+        .orderBy(sql`${tables.comments.createdAt} desc`)
+        .limit(limit)
+        .offset(offset)
+        .all()
 })
