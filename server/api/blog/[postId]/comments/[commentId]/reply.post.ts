@@ -10,7 +10,6 @@ defineRouteMeta({
                         type: "object",
                         properties: {
                             content: { type: "string" },
-                            postId: { type: 'string' }
                         },
                         required: ["content", 'postId'],
                     },
@@ -20,20 +19,20 @@ defineRouteMeta({
     }
 })
 export default defineEventHandler(async (event) => {
-    const { commentId } = await useValidatedParams(event, {
-        commentId: zh.intAsString
+    const { commentId, postId } = await useValidatedParams(event, {
+        commentId: zh.intAsString,
+        postId: z.string()
     })
 
     const data = await useValidatedBody(event, {
         content: z.string(),
-        postId: z.string()
     })
 
     const { user } = await requireUserSession(event)
 
     const comment = await useDrizzle().insert(tables.comments).values({
         content: data.content,
-        postId: data.postId,
+        postId,
         repliedCommentId: commentId,
         userId: user.id,
         createdAt: new Date(),

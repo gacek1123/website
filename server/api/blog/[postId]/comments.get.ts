@@ -24,8 +24,8 @@ defineRouteMeta({
     }
 })
 export default defineEventHandler(async (event) => {
-    const { id } = await useValidatedParams(event, {
-        id: z.string()
+    const { postId } = await useValidatedParams(event, {
+        postId: z.string()
     })
 
     const { limit, offset } = await useValidatedQuery(event, {
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
         .from(tables.comments)
         .leftJoin(tables.commentReplies, eq(tables.commentReplies.referenceId, tables.comments.id))
         .groupBy(tables.comments.id)
-        .where(and(eq(tables.comments.postId, id), isNull(tables.comments.repliedCommentId)))
+        .where(and(eq(tables.comments.postId, postId), isNull(tables.comments.repliedCommentId)))
         .orderBy(sql`${tables.comments.createdAt} desc`)
         .limit(limit)
         .offset(offset)

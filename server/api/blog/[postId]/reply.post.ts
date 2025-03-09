@@ -19,8 +19,8 @@ defineRouteMeta({
     }
 })
 export default defineEventHandler(async (event) => {
-    const { id } = await useValidatedParams(event, {
-        id: z.string()
+    const { postId } = await useValidatedParams(event, {
+        postId: z.string()
     })
 
     const data = await useValidatedBody(event, {
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
     const comment = await useDrizzle().insert(tables.comments).values({
         content: data.content,
-        postId: id,
+        postId,
         userId: user.id,
         createdAt: new Date(),
         userAvatar: user.image,

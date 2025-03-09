@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CommentForm from '~/components/comments/CommentForm.vue'
 import CommentList from '~/components/comments/CommentList.vue'
+import CommentHeader from '~/components/comments/CommentHeader.vue';
 
 import { useFormattedDate } from '~/composables/useDate';
 
@@ -26,7 +27,7 @@ if (!post.value) throw createError({
 
 const { fetchBlocks, usePostBlocksData } = usePostBlocks()
 
-useAsyncData(() => fetchBlocks(postId))
+await useAsyncData('blocks', () => fetchBlocks(postId))
 
 const blocks = usePostBlocksData(postId);
 
@@ -78,13 +79,12 @@ useSchemaOrg([
         </article>
 
 
-        <div class="mb-20">
 
+        <div class="my-10">
 
             <CommentForm />
-        </div>
 
-        <div class="mb-10">
+            <CommentHeader></CommentHeader>
 
             <CommentList></CommentList>
         </div>

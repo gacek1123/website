@@ -19,23 +19,35 @@ export const useComments = () => {
     }
 
     const fetchReplies = async (commentId: number, postId: string) => {
-        const data = await $fetch<Comment[]>(`/api/comments/${commentId}/reply`)
+        const data = await $fetch<Comment[]>(`/api/blog/${postId}/comments/${commentId}/reply`)
 
         cacheComments(postId, ...data)
     }
 
     async function fetchComments(postId: string) {
-        const { data } = await useAsyncData<Comment[]>('comments', async () => {
+        if (postId in commentsCache.value) {
+            return commentsCache.value[postId]
+        }
 
-            const data = await $fetch<Comment[]>(`/api/comments/${postId}`)
+        const { data } = await useAsyncData<Comment[]>(`comments-${postId}`, async () => {
+
+            const data = await $fetch<Comment[]>(`/api/blog/${postId}/comments`)
 
             cacheComments(postId, ...data)
 
             return data
         })
 
-        return data
+        return data.value
     }
+
+    async function fetchComment(postId: string, commentId: string) {
+        const { data } = useFetch(`/api/blog/${postId}/comments/${commentId}`)
+
+        return data
+
+    }
+
 
     function cacheComments(postId: string, ...comments: Comment[]) {
         const cachedComments = commentsCache.value[postId]
@@ -47,7 +59,7 @@ export const useComments = () => {
 
 
     async function addComment(content: string, postId: string) {
-        const data = await $fetch<Comment>(`/api/comments/${postId}`, {
+        const data = await $fetch<Comment>(`/api/blog/${postId}/comments`, {
             method: 'post',
             body: {
                 content,
@@ -59,15 +71,37 @@ export const useComments = () => {
     }
 
     async function addReply(content: string, commentId: number, postId: string) {
-        const data = await $fetch<Comment>(`/api/comments/${commentId}/reply`, {
+        const data = await $fetch<Comment>(`/api/blog/${postId}/comments/${commentId}/reply`, {
             method: 'post',
             body: {
                 content,
-                postId,
             }
         })
 
+        const comment = commentsCache.value[postId].find(({ id }) => commentId === id)
+        if (comment) comment.replies++
+
         cacheComments(postId, data)
+    }
+
+
+    function commentsCount(postId: string) {
+        return computed(() => commentsCache.value[postId]?.length ?? 0)
+    }
+
+    const order = useState<"asc" | "desc">("desc")
+
+    function useSortedComments(comments: Ref<Comment[]>) {
+        const sortedComments = computed(() => {
+            return [...comments.value].sort((a, b) => {
+                const dateA = new Date(a.createdAt).getTime()
+                const dateB = new Date(b.createdAt).getTime()
+
+                return order.value === "asc" ? dateA - dateB : dateB - dateA
+            })
+        })
+
+        return sortedComments
     }
 
 
@@ -77,7 +111,11 @@ export const useComments = () => {
         addComment,
         addReply,
         getReplies,
-        fetchReplies
+        fetchReplies,
+        commentsCount,
+        useSortedComments,
+        order,
+        fetchComment
     }
 
 }

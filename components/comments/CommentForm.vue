@@ -18,21 +18,19 @@ const props = defineProps<{
 const onSubmit = () => {
     if (props.repliedCommentId) {
         addReply(content.value, props.repliedCommentId, postId)
-
-        return
-    }
+    } else
+        addComment(content.value, postId)
 
     content.value = ''
 
-
-    addComment(content.value, postId)
 }
 
 const emit = defineEmits(["close"])
 </script>
 
 <template>
-    <div class="relative">
+
+    <div class="relative mb-10">
         <div class="absolute inset-0 flex items-center justify-center rounded-lg bg-black/5 backdrop-blur-[0.8px]"
             v-if="!loggedIn">
             <Button @click="openInPopup('/api/auth/github')" size="sm">Log in to comment</Button>

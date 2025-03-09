@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import CommentForm from './CommentForm.vue';
 import CommentList from './CommentList.vue';
+import { useClipboard } from '@vueuse/core'
 
 const props = defineProps<{
     content: string,
@@ -24,7 +25,7 @@ const props = defineProps<{
     userId: string
 }>()
 
-const createdAt = useFormattedDate(props.createdAt)
+const createdAt = computed(() => useFormattedDate(props.createdAt))
 
 const isReplying = ref(false)
 const showReplies = ref(false)
@@ -42,6 +43,15 @@ const displayReplies = async () => {
 
     await fetchReplies(props.id, postId)
     repliesLoaded.value = true
+}
+
+
+const { copy, copied, isSupported } = useClipboard()
+
+const copyLink = () => {
+    const source = `${window.origin}/blog/${postId}/comments/${props.id}`
+
+    copy(source)
 }
 
 </script>
@@ -67,7 +77,9 @@ const displayReplies = async () => {
                 <div class="flex items-center gap-x-3" v-if="!isReplying">
                     <Button @click="isReplying = !isReplying" size="sm" variant="outline">Reply</Button>
                     <Button v-if="replies && replies > 0" size="sm" variant="ghost" @click="displayReplies">
-                        <Icon icon="material-symbols:keyboard-arrow-down" class="w-5 h-5" />
+                        <Icon
+                            :icon="showReplies ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'"
+                            class="w-5 h-5" />
                         {{ replies }} replies
                     </Button>
                 </div>
@@ -79,7 +91,7 @@ const displayReplies = async () => {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                    <DropdownMenuItem>
+                    <DropdownMenuItem @click="copyLink">
                         <span>Copy link</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem @click="isReplying = !isReplying">

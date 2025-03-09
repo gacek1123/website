@@ -4,6 +4,7 @@ import CommandMenu from './components/CommandMenu.vue';
 
 <template>
   <div>
+    <NuxtLoadingIndicator />
     <CommandMenu />
     <LayoutNavbar />
     <NuxtPage />

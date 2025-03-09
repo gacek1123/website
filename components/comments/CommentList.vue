@@ -7,12 +7,14 @@ const props = defineProps<{
 
 const postId = usePostId()
 
-const { fetchComments, getComments, getReplies } = useComments()
+const { fetchComments, getComments, getReplies, useSortedComments } = useComments()
 
 if (!props.repliedCommentId)
     await fetchComments(postId)
 
 const comments = computed(() => props.repliedCommentId ? getReplies(postId, props.repliedCommentId) : getComments(postId))
+
+const sortedComments = useSortedComments(comments)
 </script>
 
 <template>
@@ -21,7 +23,8 @@ const comments = computed(() => props.repliedCommentId ? getReplies(postId, prop
     </div>
 
     <div v-else class="w-full space-y-10">
-        <CommentItem v-for="comment in comments" v-bind.prop="comment"></CommentItem>
+        <CommentItem v-for="comment in repliedCommentId ? comments : sortedComments" v-bind.prop="comment">
+        </CommentItem>
     </div>
 
 </template>
