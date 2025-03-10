@@ -12,7 +12,7 @@ const color = notionColorToCss(props.block.quote.color)
 </script>
 
 <template>
-    <blockquote :style="color" class="p-4 my-4 border-s-4 border border-border text-muted-foreground">
+    <blockquote :style="color" class="p-3 my-4 border-s-4 border border-border text-muted-foreground rounded-md">
         <TextRenderer :text="block.quote.rich_text"></TextRenderer>
     </blockquote>
 </template>

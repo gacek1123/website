@@ -33,7 +33,6 @@ defineOgImageComponent('Image', {
 useSeoMeta({
     description,
 })
-
 </script>
 
 <template>

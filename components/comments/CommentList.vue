@@ -1,29 +1,20 @@
 <script setup lang="ts">
 import CommentItem from './CommentItem.vue'
+import { type CachedComment } from '~/composables/useComment'
 
-const props = defineProps<{
-    repliedCommentId?: number
+defineProps<{
+    comments: CachedComment[]
 }>()
 
-const postId = usePostId()
-
-const { fetchComments, getComments, getReplies, useSortedComments } = useComments()
-
-if (!props.repliedCommentId)
-    await fetchComments(postId)
-
-const comments = computed(() => props.repliedCommentId ? getReplies(postId, props.repliedCommentId) : getComments(postId))
-
-const sortedComments = useSortedComments(comments)
 </script>
 
 <template>
-    <div v-if="!comments">
+    <div v-if="comments.length === 0" class="text-sm text-muted-foreground">
         No comments found
     </div>
 
     <div v-else class="w-full space-y-10">
-        <CommentItem v-for="comment in repliedCommentId ? comments : sortedComments" v-bind.prop="comment">
+        <CommentItem v-for="comment in comments" v-bind.prop="comment">
         </CommentItem>
     </div>
 

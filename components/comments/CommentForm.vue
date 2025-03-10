@@ -2,6 +2,8 @@
 import { Button } from '@/components/ui/button'
 
 import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '../ui/toast'
+import ToastAction from '../ui/toast/ToastAction.vue'
 
 const { loggedIn, openInPopup } = useUserSession()
 
@@ -15,17 +17,42 @@ const props = defineProps<{
     repliedCommentId?: number
 }>()
 
-const onSubmit = () => {
-    if (props.repliedCommentId) {
-        addReply(content.value, props.repliedCommentId, postId)
-    } else
-        addComment(content.value, postId)
+const { toast } = useToast()
 
+const emit = defineEmits(["close"])
+
+const onSubmit = async () => {
+    try {
+        if (props.repliedCommentId) {
+            await addReply(content.value, props.repliedCommentId, postId)
+        } else
+            await addComment(content.value, postId)
+
+
+        toast({
+            title: 'Success!',
+            description: 'Your comment has been posted.',
+            action: h(Button, {
+                variant: 'outline',
+            }, {
+                default: () => 'Show comment',
+            }),
+        })
+
+    } catch (err) {
+        toast({
+            title: 'Uh oh! Something went wrong.',
+            variant: 'destructive',
+            description: 'Unable to add comment.',
+        })
+    }
+
+
+    emit('close')
     content.value = ''
 
 }
 
-const emit = defineEmits(["close"])
 </script>
 
 <template>

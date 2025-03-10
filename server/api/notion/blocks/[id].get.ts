@@ -40,9 +40,9 @@ const cachedBlocks = defineCachedFunction(async (event: H3Event, pageId: string,
     maxAge: 60 * 60 * 24,
     swr: true,
     name: 'postBlocks',
-    shouldBypassCache() {
-        return import.meta.dev ?? false
-    },
+    // shouldBypassCache() {
+    //     return import.meta.dev ?? false
+    // },
     getKey: (event: H3Event, pageId: string, startCursor: string | undefined) => cacheKey(pageId, startCursor)
 })
 

@@ -34,6 +34,15 @@ const blocks = usePostBlocksData(postId);
 const { loadMoreTrigger } = useScrollLoader(() => fetchBlocks(postId), () => blocks.hasMore)
 
 
+const { fetchComments, getRootComments, useSortedComments } = useComments()
+
+await fetchComments(postId)
+
+const comments = computed(() => getRootComments(postId))
+
+const sortedComments = useSortedComments(comments)
+
+
 defineOgImageComponent('Image', {
     title: post.value.title,
     description: post.value.description,
@@ -86,7 +95,7 @@ useSchemaOrg([
 
             <CommentHeader></CommentHeader>
 
-            <CommentList></CommentList>
+            <CommentList :comments="sortedComments"></CommentList>
         </div>
     </div>
 </template>

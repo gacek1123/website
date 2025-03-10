@@ -1,28 +1,80 @@
 import type { Comment as C } from "~/server/utils/drizzle"
 
-export type Comment = C & { replies: number, createdAt: string }
+
+type Comment = C & { replies: number, createdAt: string, }
+export type CachedComment = Comment & { comments: CachedComment[] }
 
 export const useComments = () => {
 
-    const commentsCache = useState<Record<string, Comment[]>>('comments', () => ({}))
+    const commentsCache = useState<Record<string, CachedComment[]>>('comments', () => ({}))
 
-    function isReply(comment: Comment): boolean {
+    function isReply(comment: CachedComment | Comment): boolean {
         return comment.repliedCommentId !== null
     }
 
-    function getComments(postId: string) {
+    function getRootComments(postId: string) {
         return commentsCache.value[postId].filter((comment) => !isReply(comment)) ?? []
     }
 
-    function getReplies(postId: string, commentId: number) {
-        return commentsCache.value[postId].filter(comment => comment.repliedCommentId === commentId)
+    function commentToCacheComment(comment: Comment): CachedComment {
+        return {
+            ...comment,
+            comments: []
+        }
     }
 
-    const fetchReplies = async (commentId: number, postId: string) => {
+    function cacheComments(postId: string, ...comments: Comment[]) {
+        if (!commentsCache.value[postId]) commentsCache.value[postId] = [];
+        const cachedComments = commentsCache.value[postId];
+
+        cachedComments.push(...comments.map(commentToCacheComment))
+    }
+
+
+    function cacheReplies(postId: string, commentId: number, replies: Comment | Comment[]): boolean {
+
+        const foundComment = findComment(postId, commentId)
+        if (!foundComment) return false
+
+        if (Array.isArray(replies)) {
+            const cacheReplies = replies.map(commentToCacheComment)
+            foundComment.comments = cacheReplies
+
+            return true
+        }
+        foundComment.comments.push(commentToCacheComment(replies))
+
+        foundComment.replies++
+        return true
+    }
+
+    function findComment(postId: string, commentId: number) {
+        let stack = [...commentsCache.value[postId]];
+
+        while (stack.length > 0) {
+            let node = stack.pop();
+
+            if (!node) continue
+
+            if (node.id === commentId) return node;
+            if (node.comments) {
+                for (let i = node.comments.length - 1; i >= 0; i--) {
+                    stack.push(node.comments[i]);
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+    async function fetchReplies(commentId: number, postId: string) {
         const data = await $fetch<Comment[]>(`/api/blog/${postId}/comments/${commentId}/reply`)
 
-        cacheComments(postId, ...data)
+        cacheReplies(postId, commentId, data)
     }
+
+
 
     async function fetchComments(postId: string) {
         if (postId in commentsCache.value) {
@@ -49,15 +101,6 @@ export const useComments = () => {
     }
 
 
-    function cacheComments(postId: string, ...comments: Comment[]) {
-        const cachedComments = commentsCache.value[postId]
-
-        if (cachedComments)
-            cachedComments.push(...comments)
-        else commentsCache.value[postId] = comments
-    }
-
-
     async function addComment(content: string, postId: string) {
         const data = await $fetch<Comment>(`/api/blog/${postId}/comments`, {
             method: 'post',
@@ -78,10 +121,7 @@ export const useComments = () => {
             }
         })
 
-        const comment = commentsCache.value[postId].find(({ id }) => commentId === id)
-        if (comment) comment.replies++
-
-        cacheComments(postId, data)
+        cacheReplies(postId, commentId, data)
     }
 
 
@@ -91,7 +131,7 @@ export const useComments = () => {
 
     const order = useState<"asc" | "desc">("desc")
 
-    function useSortedComments(comments: Ref<Comment[]>) {
+    function useSortedComments(comments: Ref<CachedComment[]>) {
         const sortedComments = computed(() => {
             return [...comments.value].sort((a, b) => {
                 const dateA = new Date(a.createdAt).getTime()
@@ -107,10 +147,10 @@ export const useComments = () => {
 
     return {
         fetchComments,
-        getComments,
+        getRootComments,
         addComment,
         addReply,
-        getReplies,
+
         fetchReplies,
         commentsCount,
         useSortedComments,

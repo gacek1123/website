@@ -33,7 +33,7 @@
     "nuxt-schema-org": "^4.1.1",
     "nuxt-shiki": "0.3.0",
     "radix-vue": "^1.9.14",
-    "reka-ui": "^2.0.0",
+    "reka-ui": "^2.0.2",
     "shadcn-nuxt": "0.11.3",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",

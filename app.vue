@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CommandMenu from './components/CommandMenu.vue';
+import Toaster from '@/components/ui/toast/Toaster.vue'
 </script>
 
 <template>
@@ -9,5 +10,8 @@ import CommandMenu from './components/CommandMenu.vue';
     <LayoutNavbar />
     <NuxtPage />
 
+    <ClientOnly>
+      <Toaster />
+    </ClientOnly>
   </div>
 </template>

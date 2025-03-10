@@ -10,6 +10,8 @@ import {
 import CommentForm from './CommentForm.vue';
 import CommentList from './CommentList.vue';
 import { useClipboard } from '@vueuse/core'
+import { useToast } from '../ui/toast';
+import type { CachedComment } from '~/composables/useComment';
 
 const props = defineProps<{
     content: string,
@@ -23,14 +25,16 @@ const props = defineProps<{
     replies?: number
     postId: string,
     userId: string
+    comments: CachedComment[]
 }>()
+
+const replies = computed(() => props.replies ?? props.comments.length)
 
 const createdAt = computed(() => useFormattedDate(props.createdAt))
 
 const isReplying = ref(false)
 const showReplies = ref(false)
 const repliesLoaded = ref(false)
-
 
 const postId = usePostId()
 
@@ -45,13 +49,36 @@ const displayReplies = async () => {
     repliesLoaded.value = true
 }
 
+const { toast } = useToast()
 
-const { copy, copied, isSupported } = useClipboard()
+const { copy, isSupported } = useClipboard()
 
-const copyLink = () => {
+const copyLink = async () => {
     const source = `${window.origin}/blog/${postId}/comments/${props.id}`
 
-    copy(source)
+    if (!isSupported.value) {
+        toast({
+            title: 'Error.',
+            description: `Your browser doesn't support copying to clipboard. Please copy the link manually: ${source}`,
+
+        })
+    }
+
+    try {
+        await copy(source)
+
+        toast({
+            title: 'Success!',
+            description: 'Link copied to clipboard.',
+        })
+    } catch (err) {
+        toast({
+            title: 'Oops!',
+            description: 'Something went wrong while copying the link.',
+            variant: 'destructive'
+        })
+    }
+
 }
 
 </script>
@@ -76,7 +103,7 @@ const copyLink = () => {
 
                 <div class="flex items-center gap-x-3" v-if="!isReplying">
                     <Button @click="isReplying = !isReplying" size="sm" variant="outline">Reply</Button>
-                    <Button v-if="replies && replies > 0" size="sm" variant="ghost" @click="displayReplies">
+                    <Button v-if="replies > 0" size="sm" variant="ghost" @click="displayReplies">
                         <Icon
                             :icon="showReplies ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'"
                             class="w-5 h-5" />
@@ -104,6 +131,6 @@ const copyLink = () => {
         <CommentForm class="ml-10 mt-5" v-if="isReplying" :replied-comment-id="id" @close="isReplying = false">
         </CommentForm>
 
-        <CommentList v-if="showReplies" :replied-comment-id="id" class="pl-10 mt-10"></CommentList>
+        <CommentList v-if="showReplies && comments" :comments="comments" class="pl-10 mt-10"></CommentList>
     </div>
 </template>
