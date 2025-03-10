@@ -10,7 +10,9 @@ import {
 import CommentForm from './CommentForm.vue';
 import CommentList from './CommentList.vue';
 import { useClipboard } from '@vueuse/core'
-import { useToast } from '../ui/toast';
+import { toast } from 'vue-sonner'
+
+
 import type { CachedComment } from '~/composables/useComment';
 
 const props = defineProps<{
@@ -27,6 +29,14 @@ const props = defineProps<{
     userId: string
     comments: CachedComment[]
 }>()
+
+
+const route = useRoute()
+
+const isHighlighted = computed(() => {
+    const query = route.query.commentId
+    return typeof query === 'string' ? parseInt(query) === props.id : false
+})
 
 const replies = computed(() => props.replies ?? props.comments.length)
 
@@ -48,44 +58,38 @@ const displayReplies = async () => {
     await fetchReplies(props.id, postId)
     repliesLoaded.value = true
 }
-
-const { toast } = useToast()
-
 const { copy, isSupported } = useClipboard()
 
 const copyLink = async () => {
     const source = `${window.origin}/blog/${postId}/comments/${props.id}`
 
     if (!isSupported.value) {
-        toast({
-            title: 'Error.',
+        toast.error('Error.', {
             description: `Your browser doesn't support copying to clipboard. Please copy the link manually: ${source}`,
-
         })
     }
 
     try {
         await copy(source)
 
-        toast({
-            title: 'Success!',
+        toast('Success!', {
             description: 'Link copied to clipboard.',
         })
     } catch (err) {
-        toast({
-            title: 'Oops!',
+
+        toast.error('Oops!', {
             description: 'Something went wrong while copying the link.',
-            variant: 'destructive'
         })
     }
-
 }
 
 </script>
 
 <template>
     <div>
-        <div class="flex items-start gap-4">
+        <div class="flex items-start gap-4 p-2 rounded-md" :id="`comment-${id}`" :class="{
+            'bg-neutral-50': isHighlighted
+        }">
             <Avatar class="shrink-0 w-7 h-7">
                 <AvatarImage :src="userAvatar" alt="user avatar" />
                 <AvatarFallback>CN</AvatarFallback>

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '../ui/toast'
-import ToastAction from '../ui/toast/ToastAction.vue'
 
 const { loggedIn, openInPopup } = useUserSession()
 
@@ -17,27 +16,52 @@ const props = defineProps<{
     repliedCommentId?: number
 }>()
 
-const { toast } = useToast()
 
 const emit = defineEmits(["close"])
 
+const router = useRouter()
+const { toast } = useToast()
+
+
 const onSubmit = async () => {
     try {
-        if (props.repliedCommentId) {
-            await addReply(content.value, props.repliedCommentId, postId)
-        } else
-            await addComment(content.value, postId)
+
+        const { id } = props.repliedCommentId ? await addReply(content.value, props.repliedCommentId, postId) : await addComment(content.value, postId)
 
 
-        toast({
+        const { dismiss } = toast({
             title: 'Success!',
             description: 'Your comment has been posted.',
             action: h(Button, {
                 variant: 'outline',
+                size: 'sm',
+                onClick: () => {
+                    const comment = document.querySelector(`#comment-${id}`)
+                    if (comment)
+                        comment.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+
+                    router.push({
+                        query: {
+                            commentId: id
+                        }
+                    })
+
+
+
+                }
             }, {
-                default: () => 'Show comment',
-            }),
+                default: () => 'Show comment'
+            })
         })
+        setTimeout(() => {
+
+            dismiss()
+
+            router.push({
+                query: {
+                }
+            })
+        }, 5000)
 
     } catch (err) {
         toast({

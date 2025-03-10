@@ -42,6 +42,7 @@ export const useComments = () => {
 
             return true
         }
+
         foundComment.comments.push(commentToCacheComment(replies))
 
         foundComment.replies++
@@ -111,6 +112,8 @@ export const useComments = () => {
         })
 
         cacheComments(postId, data)
+
+        return data
     }
 
     async function addReply(content: string, commentId: number, postId: string) {
@@ -122,6 +125,8 @@ export const useComments = () => {
         })
 
         cacheReplies(postId, commentId, data)
+
+        return data
     }
 
 
