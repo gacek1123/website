@@ -10,10 +10,10 @@ import {
 import CommentForm from './CommentForm.vue';
 import CommentList from './CommentList.vue';
 import { useClipboard } from '@vueuse/core'
-import { toast } from 'vue-sonner'
-
-
 import type { CachedComment } from '~/composables/useComment';
+import { useToast } from '../ui/toast';
+
+
 
 const props = defineProps<{
     content: string,
@@ -24,14 +24,16 @@ const props = defineProps<{
     repliedCommentId: number | null
     upvoteCount: number
     downvoteCount: number
-    replies?: number
+    replies: number
     postId: string,
     userId: string
-    comments: CachedComment[]
+    comments: CachedComment[],
+    depth: number
 }>()
 
 
 const route = useRoute()
+const router = useRouter()
 
 const isHighlighted = computed(() => {
     const query = route.query.commentId
@@ -48,9 +50,17 @@ const repliesLoaded = ref(false)
 
 const postId = usePostId()
 
-const { fetchReplies } = useComments()
+const { fetchReplies, getCommentUrl } = useComments()
+
+const commentUrl = getCommentUrl(props)
 
 const displayReplies = async () => {
+    if (props.depth >= 3) {
+        router.push(commentUrl)
+
+        return
+    }
+
     showReplies.value = !showReplies.value
 
     if (repliesLoaded.value) return
@@ -58,13 +68,18 @@ const displayReplies = async () => {
     await fetchReplies(props.id, postId)
     repliesLoaded.value = true
 }
+
 const { copy, isSupported } = useClipboard()
 
+const { toast } = useToast()
+
 const copyLink = async () => {
-    const source = `${window.origin}/blog/${postId}/comments/${props.id}`
+    const source = `${window.origin}${commentUrl}`
+
 
     if (!isSupported.value) {
-        toast.error('Error.', {
+        toast({
+            title: 'Error.',
             description: `Your browser doesn't support copying to clipboard. Please copy the link manually: ${source}`,
         })
     }
@@ -72,12 +87,14 @@ const copyLink = async () => {
     try {
         await copy(source)
 
-        toast('Success!', {
+        toast({
+            title: 'Success!',
             description: 'Link copied to clipboard.',
         })
     } catch (err) {
 
-        toast.error('Oops!', {
+        toast({
+            title: 'Oops!',
             description: 'Something went wrong while copying the link.',
         })
     }
@@ -107,6 +124,9 @@ const copyLink = async () => {
 
                 <div class="flex items-center gap-x-3" v-if="!isReplying">
                     <Button @click="isReplying = !isReplying" size="sm" variant="outline">Reply</Button>
+
+
+
                     <Button v-if="replies > 0" size="sm" variant="ghost" @click="displayReplies">
                         <Icon
                             :icon="showReplies ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'"

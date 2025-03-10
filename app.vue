@@ -11,7 +11,7 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
     <NuxtPage />
 
     <ClientOnly>
-      <Toaster />
+      <Toaster class="pointer-events-auto" />
     </ClientOnly>
   </div>
 </template>

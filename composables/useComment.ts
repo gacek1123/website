@@ -1,25 +1,26 @@
 import type { Comment as C } from "~/server/utils/drizzle"
 
 
-type Comment = C & { replies: number, createdAt: string, }
-export type CachedComment = Comment & { comments: CachedComment[] }
+type Comment = Omit<C, 'createdAt'> & { replies: number, createdAt: string, }
+export type CachedComment = Comment & { comments: CachedComment[], depth: number }
 
 export const useComments = () => {
 
     const commentsCache = useState<Record<string, CachedComment[]>>('comments', () => ({}))
 
-    function isReply(comment: CachedComment | Comment): boolean {
-        return comment.repliedCommentId !== null
+    function getCommentUrl(comment: Comment | CachedComment): string {
+        return `/blog/${comment.postId}/comments/${comment.id}`
     }
 
     function getRootComments(postId: string) {
-        return commentsCache.value[postId].filter((comment) => !isReply(comment)) ?? []
+        return commentsCache.value[postId].filter((comment) => comment.depth === 0) ?? []
     }
 
-    function commentToCacheComment(comment: Comment): CachedComment {
+    function commentToCacheComment(comment: Comment, depth: number): CachedComment {
         return {
             ...comment,
-            comments: []
+            comments: [],
+            depth
         }
     }
 
@@ -27,7 +28,7 @@ export const useComments = () => {
         if (!commentsCache.value[postId]) commentsCache.value[postId] = [];
         const cachedComments = commentsCache.value[postId];
 
-        cachedComments.push(...comments.map(commentToCacheComment))
+        cachedComments.push(...comments.map((comment) => commentToCacheComment(comment, 0)))
     }
 
 
@@ -37,13 +38,13 @@ export const useComments = () => {
         if (!foundComment) return false
 
         if (Array.isArray(replies)) {
-            const cacheReplies = replies.map(commentToCacheComment)
+            const cacheReplies = replies.map((rep) => commentToCacheComment(rep, foundComment.depth + 1))
             foundComment.comments = cacheReplies
 
             return true
         }
 
-        foundComment.comments.push(commentToCacheComment(replies))
+        foundComment.comments.push(commentToCacheComment(replies, foundComment.depth + 1))
 
         foundComment.replies++
         return true
@@ -95,9 +96,20 @@ export const useComments = () => {
     }
 
     async function fetchComment(postId: string, commentId: string) {
-        const { data } = useFetch(`/api/blog/${postId}/comments/${commentId}`)
+        if (postId in commentsCache.value) {
+            return commentsCache.value[postId]
+        }
 
-        return data
+        const { data } = await useAsyncData<Comment>(`comment-${postId}`, async () => {
+
+            const data = await $fetch<Comment>(`/api/blog/${postId}/comments/${commentId}`)
+
+            cacheComments(postId, data)
+
+            return data
+        })
+
+        return data.value
 
     }
 
@@ -155,12 +167,12 @@ export const useComments = () => {
         getRootComments,
         addComment,
         addReply,
-
         fetchReplies,
         commentsCount,
         useSortedComments,
         order,
-        fetchComment
+        fetchComment,
+        getCommentUrl
     }
 
 }

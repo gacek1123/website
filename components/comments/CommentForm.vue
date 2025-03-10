@@ -26,7 +26,7 @@ const { toast } = useToast()
 const onSubmit = async () => {
     try {
 
-        const { id } = props.repliedCommentId ? await addReply(content.value, props.repliedCommentId, postId) : await addComment(content.value, postId)
+        const { id, repliedCommentId } = props.repliedCommentId ? await addReply(content.value, props.repliedCommentId, postId) : await addComment(content.value, postId)
 
 
         const { dismiss } = toast({
@@ -42,7 +42,7 @@ const onSubmit = async () => {
 
                     router.push({
                         query: {
-                            commentId: id
+                            commentId: repliedCommentId ?? id
                         }
                     })
 

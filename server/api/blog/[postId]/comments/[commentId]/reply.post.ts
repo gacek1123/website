@@ -46,5 +46,5 @@ export default defineEventHandler(async (event) => {
         commentId: comment.id
     })
 
-    return comment
+    return { ...comment, replies: 0 }
 })
