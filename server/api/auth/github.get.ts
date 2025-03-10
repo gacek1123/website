@@ -1,6 +1,7 @@
 export default defineOAuthGitHubEventHandler({
     config: {
-        emailRequired: true
+        emailRequired: true,
+        scope: ['read:user']
     },
     async onSuccess(event, { user, tokens }) {
         await setUserSession(event, {
