@@ -20,7 +20,8 @@ export const useComments = () => {
         return {
             ...comment,
             comments: [],
-            depth
+            depth,
+            replies: comment.replies ?? 0
         }
     }
 
