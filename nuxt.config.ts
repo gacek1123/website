@@ -14,13 +14,17 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/image',
     '@nuxtjs/seo',
-    'nuxt-og-image',
     '@nuxthub/core',
     'nuxt-shiki',
     'nuxt-auth-utils',
+    'nuxt-og-image'
   ],
 
   nitro: {
+    preset: 'cloudflare-pages',
+    cloudflare: {
+      nodeCompat: true
+    },
     experimental: {
       openAPI: !isProduction()
     }
@@ -57,12 +61,24 @@ export default defineNuxtConfig({
     }),
 
   },
+
   ogImage: {
+    compatibility: {
+      runtime: {
+        satori: "node",
+        resvg: false,
+        'css-inline': false,
+        sharp: false,
+        chromium: false,
+      }
+    },
+
     enabled: isProduction(),
     debug: true,
     fonts: ["Inter:400", 'Inter:500', "Inter:700"],
     defaults: {
-      cacheMaxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+      cacheMaxAgeSeconds: 60 * 60 * 24 * 7, // 7 days    
+      renderer: 'satori'
     },
     runtimeCacheStorage: {
       driver: 'cloudflare-kv-binding',
