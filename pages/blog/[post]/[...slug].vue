@@ -89,8 +89,7 @@ useSchemaOrg([
 
 
 
-        <div class="mb-10 mt-10">
-
+        <div class="my-10">
             <CommentForm />
 
             <CommentHeader></CommentHeader>

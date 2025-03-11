@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@nuxt/image',
     '@nuxtjs/color-mode',
-    '@nuxt/image',
     '@nuxtjs/seo',
     '@nuxthub/core',
     'nuxt-shiki',
