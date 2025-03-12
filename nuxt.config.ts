@@ -16,8 +16,14 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     'nuxt-shiki',
     'nuxt-auth-utils',
-    'nuxt-og-image'
+    'nuxt-og-image',
+    '@nuxtjs/critters',
+    '@pinia/colada-nuxt',
+    '@pinia/nuxt',
   ],
+  future: {
+    compatibilityVersion: 4,
+  },
 
   nitro: {
     preset: 'cloudflare-pages',
@@ -32,6 +38,14 @@ export default defineNuxtConfig({
   shiki: {
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
+
+  // https://dev.to/jacobandrewsky/optimizing-css-performance-in-nuxt-with-critters-4k8i
+  critters: {
+    config: {
+      preload: 'swap',
+    },
+  },
+
   hub: {
     database: true,
     cache: true,
@@ -119,6 +133,8 @@ export default defineNuxtConfig({
   },
 
   image: {
+    domains: [],
+
     provider: "none",
     providers: {
       cloudflareProvider: {
