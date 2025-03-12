@@ -1,8 +1,6 @@
 import type { BlockObjectResponse, ListBlockChildrenResponse, PartialBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import type { Post } from "~/shared/notion/post"
-import { FetchError } from 'ofetch'
-import type { AsyncDataRequestStatus } from "#app"
-
+import { useQuery } from '@tanstack/vue-query'
 
 export const usePostId = () => {
     const route = useRoute();
@@ -11,72 +9,34 @@ export const usePostId = () => {
     return postId
 }
 
-export const usePosts = () => {
-    const posts = useState<Post[]>("posts", () => [])
+export async function fetchPost(postId: string) {
+    const { data, suspense } = useQuery({
+        queryKey: [`posts`, postId],
+        queryFn: () => $fetch<Post>(`/api/notion/page/${postId}`),
+    })
 
-    async function fetchPosts(): Promise<{ posts?: Ref<Post[]>, error?: Ref<FetchError | null>, status?: Ref<AsyncDataRequestStatus> }> {
-        if (posts.value.length) return { posts }
+    await suspense()
 
-        const { data, error, status } = await useFetch("/api/notion/query-database")
-
-        if (error.value || !data.value) return { error, status }
-
-        posts.value = data.value
-
-        return { posts }
-    }
-
-
-    async function fetchPost(postId: string) {
-        const data = await useFetch<Post>("/api/notion/page/" + postId, {
-            getCachedData(key, nuxt) {
-                return nuxt.isHydrating ? nuxt.payload.data[key] : findPost(postId)
-            }
-        })
-
-        return data
-    }
-
-
-    const findPost = (postId: string) => posts.value.find(({ id }) => id === postId)
-
-    const latestPosts = computed(() => posts.value.slice(0, 2))
-
-    return { fetchPosts, posts, fetchPost, latestPosts, findPost }
+    return data
 }
 
-type Blocks = {
-    hasMore: boolean;
-    blocks: (BlockObjectResponse | PartialBlockObjectResponse)[];
-    nextCursor: string | null;
-};
+export async function fetchPosts() {
+    const { data, suspense } = useQuery({
+        queryKey: ['posts'],
+        queryFn: () => $fetch<Post[]>('/api/notion/query-database')
+    })
 
-export const usePostBlocks = () => {
-    const blocksCache = useState<Record<string, Blocks>>(() => ({}));
+    await suspense()
 
-    async function fetchBlocks(postId: string) {
-        const cachedBlock = blocksCache.value[postId] ??= { hasMore: true, blocks: [], nextCursor: null };
+    return data
+}
 
-        if (!cachedBlock.hasMore) return;
+export function fetchBlocks({
+    postId,
+    nextCursor
+}: { postId: string, nextCursor?: string }) {
+    return $fetch<ListBlockChildrenResponse>(`/api/notion/blocks/${postId}`, {
+        params: nextCursor ? { start_cursor: nextCursor } : {}
+    });
 
-        const data = await $fetch<ListBlockChildrenResponse>(`/api/notion/blocks/${postId}`, {
-            params: cachedBlock.nextCursor ? { start_cursor: cachedBlock.nextCursor } : {}
-        });
-
-
-        cachedBlock.hasMore = data.has_more;
-        cachedBlock.nextCursor = data.next_cursor;
-        cachedBlock.blocks = [...cachedBlock.blocks, ...data.results];
-
-        return cachedBlock
-    }
-
-    function usePostBlocksData(postId: string) {
-        return blocksCache.value[postId] ?? { hasMore: true, blocks: [], nextCursor: null }
-    }
-
-    return {
-        fetchBlocks,
-        usePostBlocksData
-    };
-};
+}

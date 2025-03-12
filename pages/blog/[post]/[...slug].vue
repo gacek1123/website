@@ -2,11 +2,8 @@
 import CommentForm from '~/components/comments/CommentForm.vue'
 import CommentList from '~/components/comments/CommentList.vue'
 import CommentHeader from '~/components/comments/CommentHeader.vue';
-
 import { useFormattedDate } from '~/composables/useDate';
-
-
-const { fetchPost } = usePosts();
+import { useInfiniteQuery } from '@tanstack/vue-query';
 
 definePageMeta({
     alias: [
@@ -17,7 +14,7 @@ definePageMeta({
 
 const postId = usePostId()
 
-const { data: post } = await fetchPost(postId)
+const post = await fetchPost(postId)
 
 if (!post.value) throw createError({
     message: "Post not found",
@@ -25,14 +22,25 @@ if (!post.value) throw createError({
     statusCode: 404
 })
 
-const { fetchBlocks, usePostBlocksData } = usePostBlocks()
+const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    suspense
+} = useInfiniteQuery({
+    queryKey: ['blocks', postId],
+    queryFn: ({ pageParam }) => fetchBlocks({ postId, nextCursor: pageParam }),
+    getNextPageParam: (lastPage) => lastPage.next_cursor,
+    initialPageParam: ''
+})
+await suspense()
 
-await useAsyncData('blocks', () => fetchBlocks(postId))
 
-const blocks = usePostBlocksData(postId);
+const blocks = computed(() => data.value?.pages.flatMap(chunk => chunk.results))
 
-const { loadMoreTrigger } = useScrollLoader(() => fetchBlocks(postId), () => blocks.hasMore)
 
+// todo: refactor
+const { loadMoreTrigger } = useScrollLoader(fetchNextPage, hasNextPage)
 
 const { fetchComments, getRootComments, useSortedComments } = useComments()
 
@@ -54,7 +62,6 @@ useSeoMeta({
     description: post.value.description,
     ogTitle: post.value.title,
     ogDescription: post.value.description,
-
     twitterCard: 'summary_large_image'
 })
 
@@ -77,11 +84,11 @@ useSchemaOrg([
             <p class="text-muted-foreground mt-4">{{ useFormattedDate(post.createdAt) }}</p>
         </div>
 
-        <article class="mb-24 text-justify sm:text-start">
-            <NotionRenderer :blocks="blocks.blocks"></NotionRenderer>
+        <article class="mb-24 text-justify sm:text-start" v-if="blocks">
+            <NotionRenderer :blocks="blocks"></NotionRenderer>
 
             <ClientOnly>
-                <div class="mt-10" ref="loadMoreTrigger" v-if="blocks.hasMore">
+                <div class="mt-10" ref="loadMoreTrigger" v-if="hasNextPage">
                     Loading...
                 </div>
             </ClientOnly>

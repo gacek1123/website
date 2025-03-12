@@ -52,7 +52,10 @@ export const useComments = () => {
     }
 
     function findComment(postId: string, commentId: number) {
-        let stack = [...commentsCache.value[postId]];
+        const comments = commentsCache.value[postId]
+        if (!comments) return null
+
+        let stack = [...comments];
 
         while (stack.length > 0) {
             let node = stack.pop();
@@ -77,7 +80,7 @@ export const useComments = () => {
         cacheReplies(postId, commentId, data)
     }
 
-    1
+
 
     async function fetchComments(postId: string) {
         if (postId in commentsCache.value) {

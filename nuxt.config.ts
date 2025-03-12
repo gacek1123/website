@@ -16,11 +16,7 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     'nuxt-shiki',
     'nuxt-auth-utils',
-    'nuxt-og-image',
-    '@nuxtjs/critters',
-    '@pinia/colada-nuxt',
-    '@pinia/nuxt',
-  ],
+    'nuxt-og-image'],
   future: {
     compatibilityVersion: 4,
   },
@@ -39,12 +35,6 @@ export default defineNuxtConfig({
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
 
-  // https://dev.to/jacobandrewsky/optimizing-css-performance-in-nuxt-with-critters-4k8i
-  critters: {
-    config: {
-      preload: 'swap',
-    },
-  },
 
   hub: {
     database: true,

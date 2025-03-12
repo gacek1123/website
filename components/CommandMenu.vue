@@ -15,7 +15,7 @@ import { useMagicKeys } from '@vueuse/core'
 import { watch, } from 'vue'
 import { pages } from './layout/Navbar.vue'
 
-const { latestPosts } = usePosts()
+const { data: latestPosts } = fetchPosts()
 
 const open = useState("CommandMenu", () => false)
 
