@@ -10,9 +10,9 @@ import {
 import CommentForm from './CommentForm.vue';
 import CommentList from './CommentList.vue';
 import { useClipboard } from '@vueuse/core'
-import type { CachedComment } from '~/composables/useComment';
+import { type Comment } from '~/composables/comment';
 import { useToast } from '../ui/toast';
-
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
 
 
 const props = defineProps<{
@@ -27,46 +27,39 @@ const props = defineProps<{
     replies: number
     postId: string,
     userId: string
-    comments: CachedComment[],
     depth: number
 }>()
 
 
-const route = useRoute()
+const comments = ref<Comment[]>([])
+
 const router = useRouter()
 
-const isHighlighted = computed(() => {
-    const query = route.query.commentId
-    return typeof query === 'string' ? parseInt(query) === props.id : false
-})
-
-const replies = computed(() => props.replies ?? props.comments.length)
+const replies = computed(() => comments.value.length >= props.replies ? comments.value.length : props.replies)
 
 const createdAt = computed(() => useFormattedDate(props.createdAt))
 
 const isReplying = ref(false)
 const showReplies = ref(false)
-const repliesLoaded = ref(false)
 
-const postId = usePostId()
+function commentUrl(comment: Comment): string {
+    return `/blog/${comment.postId}/comments/${comment.id}`
+}
 
-const { fetchReplies, getCommentUrl } = useComments()
+const url = commentUrl(props)
 
-const commentUrl = getCommentUrl(props)
+const queryClient = useQueryClient()
 
-const displayReplies = async () => {
+const fetchReplies = async () => {
     if (props.depth >= 3) {
-        router.push(commentUrl)
+        router.push(url)
 
         return
     }
 
+    comments.value = await useReplies(queryClient, props.id)
+
     showReplies.value = !showReplies.value
-
-    if (repliesLoaded.value) return
-
-    await fetchReplies(props.id, postId)
-    repliesLoaded.value = true
 }
 
 const { copy, isSupported } = useClipboard()
@@ -104,9 +97,7 @@ const copyLink = async () => {
 
 <template>
     <div>
-        <div class="flex items-start gap-4 p-2 rounded-md" :id="`comment-${id}`" :class="{
-            'bg-neutral-50': isHighlighted
-        }">
+        <div class="flex items-start gap-4 p-2 rounded-md" :id="`comment-${id}`">
             <Avatar class="shrink-0 w-7 h-7">
                 <AvatarImage :src="userAvatar" alt="user avatar" />
                 <AvatarFallback>CN</AvatarFallback>
@@ -127,7 +118,7 @@ const copyLink = async () => {
 
 
 
-                    <Button v-if="replies > 0" size="sm" variant="ghost" @click="displayReplies">
+                    <Button v-if="replies > 0" size="sm" variant="ghost" @click="fetchReplies">
                         <Icon
                             :icon="showReplies ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'"
                             class="w-5 h-5" />
@@ -152,9 +143,10 @@ const copyLink = async () => {
             </DropdownMenu>
 
         </div>
-        <CommentForm class="ml-10 mt-5" v-if="isReplying" :replied-comment-id="id" @close="isReplying = false">
+        <CommentForm class="ml-10 mt-5" v-if="isReplying" :repliedCommentId="id" @close="isReplying = false">
         </CommentForm>
 
-        <CommentList v-if="showReplies && comments" :comments="comments" class="pl-10 mt-10"></CommentList>
+        <CommentList class="pl-10 mt-10" v-if="showReplies" :comments="comments" :depth="depth + 1">
+        </CommentList>
     </div>
 </template>

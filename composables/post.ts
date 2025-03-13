@@ -1,4 +1,4 @@
-import type { BlockObjectResponse, ListBlockChildrenResponse, PartialBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints"
+import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints"
 import type { Post } from "~/shared/notion/post"
 import { useQuery } from '@tanstack/vue-query'
 
@@ -9,7 +9,7 @@ export const usePostId = () => {
     return postId
 }
 
-export async function fetchPost(postId: string) {
+export async function usePost(postId: string) {
     const { data, suspense } = useQuery({
         queryKey: [`posts`, postId],
         queryFn: () => $fetch<Post>(`/api/notion/page/${postId}`),
@@ -20,7 +20,7 @@ export async function fetchPost(postId: string) {
     return data
 }
 
-export async function fetchPosts() {
+export async function usePosts() {
     const { data, suspense } = useQuery({
         queryKey: ['posts'],
         queryFn: () => $fetch<Post[]>('/api/notion/query-database')

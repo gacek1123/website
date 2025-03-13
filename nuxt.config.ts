@@ -16,7 +16,8 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     'nuxt-shiki',
     'nuxt-auth-utils',
-    'nuxt-og-image'],
+    'nuxt-og-image',
+  ],
   future: {
     compatibilityVersion: 4,
   },
@@ -41,6 +42,7 @@ export default defineNuxtConfig({
     cache: true,
     kv: true,
   },
+
   build: {
     transpile: ['shiki'],
   },

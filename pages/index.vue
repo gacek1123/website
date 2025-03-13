@@ -40,7 +40,7 @@ const links = [
 ]
 
 
-const posts = await fetchPosts()
+const posts = await usePosts()
 
 const latestPosts = computed(() => posts.value?.slice(0, 2))
 

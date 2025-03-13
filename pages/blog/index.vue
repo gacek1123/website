@@ -10,7 +10,7 @@ import {
 
 
 
-const posts = await fetchPosts()
+const posts = await usePosts()
 
 const searchText = ref("")
 

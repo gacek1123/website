@@ -4,6 +4,8 @@ import CommentList from '~/components/comments/CommentList.vue'
 import CommentHeader from '~/components/comments/CommentHeader.vue';
 import { useFormattedDate } from '~/composables/useDate';
 import { useInfiniteQuery } from '@tanstack/vue-query';
+import { usePost } from '~/composables/post';
+import { type Comment } from '~/composables/comment'
 
 definePageMeta({
     alias: [
@@ -14,7 +16,7 @@ definePageMeta({
 
 const postId = usePostId()
 
-const post = await fetchPost(postId)
+const post = await usePost(postId)
 
 if (!post.value) throw createError({
     message: "Post not found",
@@ -33,22 +35,19 @@ const {
     getNextPageParam: (lastPage) => lastPage.next_cursor,
     initialPageParam: ''
 })
+
 await suspense()
 
 
+const { useSortedComments, fetchComments } = await useComments(postId)
+
+await fetchComments()
+
+const commments = useSortedComments()
+
 const blocks = computed(() => data.value?.pages.flatMap(chunk => chunk.results))
 
-
-// todo: refactor
 const { loadMoreTrigger } = useScrollLoader(fetchNextPage, hasNextPage)
-
-const { fetchComments, getRootComments, useSortedComments } = useComments()
-
-await fetchComments(postId)
-
-const comments = computed(() => getRootComments(postId))
-
-const sortedComments = useSortedComments(comments)
 
 
 defineOgImageComponent('Image', {
@@ -101,7 +100,7 @@ useSchemaOrg([
 
             <CommentHeader></CommentHeader>
 
-            <CommentList :comments="sortedComments"></CommentList>
+            <CommentList :comments="commments"></CommentList>
         </div>
     </div>
 </template>
