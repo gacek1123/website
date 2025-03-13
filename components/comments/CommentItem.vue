@@ -68,7 +68,7 @@ const { copy, isSupported } = useClipboard()
 const { toast } = useToast()
 
 const copyLink = async () => {
-    const source = `${window.origin}${commentUrl}`
+    const source = `${window.origin}${url}`
 
 
     if (!isSupported.value) {

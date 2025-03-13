@@ -129,10 +129,8 @@ export default function useComments() {
 
         await suspense()
 
-        if (data.value)
-            comments.value.push(data.value)
 
-
+        return data
     }
 
     const order = useState<"asc" | "desc">("desc")
