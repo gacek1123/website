@@ -10,9 +10,9 @@ import {
 import CommentForm from './CommentForm.vue';
 import CommentList from './CommentList.vue';
 import { useClipboard } from '@vueuse/core'
-import { type Comment } from '~/composables/comment';
+import { type Comment } from '~/composables/useComments';
 import { useToast } from '../ui/toast';
-import { useQuery, useQueryClient } from '@tanstack/vue-query';
+import useComments from '~/composables/useComments';
 
 
 const props = defineProps<{
@@ -30,8 +30,9 @@ const props = defineProps<{
     depth: number
 }>()
 
+const { getReplies, fetchReplies } = useComments()
 
-const comments = ref<Comment[]>([])
+const comments = getReplies(props.id)
 
 const router = useRouter()
 
@@ -48,16 +49,16 @@ function commentUrl(comment: Comment): string {
 
 const url = commentUrl(props)
 
-const queryClient = useQueryClient()
 
-const fetchReplies = async () => {
+
+const displayReplies = async () => {
     if (props.depth >= 3) {
         router.push(url)
 
         return
     }
 
-    comments.value = await useReplies(queryClient, props.id)
+    await fetchReplies(props.id)
 
     showReplies.value = !showReplies.value
 }
@@ -116,9 +117,7 @@ const copyLink = async () => {
                 <div class="flex items-center gap-x-3" v-if="!isReplying">
                     <Button @click="isReplying = !isReplying" size="sm" variant="outline">Reply</Button>
 
-
-
-                    <Button v-if="replies > 0" size="sm" variant="ghost" @click="fetchReplies">
+                    <Button v-if="replies > 0" size="sm" variant="ghost" @click="displayReplies">
                         <Icon
                             :icon="showReplies ? 'material-symbols:keyboard-arrow-up' : 'material-symbols:keyboard-arrow-down'"
                             class="w-5 h-5" />

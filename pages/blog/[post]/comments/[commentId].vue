@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CommentList from '~/components/comments/CommentList.vue'
-import useComments from '~/composables/comment'
+import useComments from '~/composables/useComments'
 
 
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CommentItem from './CommentItem.vue'
-import { type Comment } from '~/composables/comment'
+import { type Comment } from '~/composables/useComments'
 
 withDefaults(
     defineProps<{
@@ -17,7 +17,7 @@ withDefaults(
     </div>
 
     <div v-else class="w-full space-y-10">
-        <CommentItem v-for="comment in comments" v-bind.prop="comment" :depth="depth">
+        <CommentItem v-for="comment in comments" v-bind.prop="comment" :depth="depth" :key="comment.id">
         </CommentItem>
     </div>
 

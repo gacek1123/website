@@ -2,13 +2,12 @@
 import { Button } from '@/components/ui/button'
 
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '../ui/toast'
+import useComment from '~/composables/useComments'
 
 const { loggedIn, openInPopup } = useUserSession()
 
 const content = ref('')
 
-const postId = usePostId()
 
 const props = defineProps<{
     repliedCommentId?: number
@@ -17,15 +16,13 @@ const props = defineProps<{
 
 const emit = defineEmits(["close"])
 
-const { toast } = useToast()
+const { useAddReply, useAddComment } = useComment()
+
+const { mutate } = props.repliedCommentId ? useAddReply(props.repliedCommentId) : useAddComment()
 
 
 const onSubmit = async () => {
-    if (props.repliedCommentId) await addReply(content.value, props.repliedCommentId, postId)
-    else
-        await addComment(content.value, postId)
-
-
+    mutate({ content: content.value })
 
     emit('close')
     content.value = ''

@@ -5,7 +5,7 @@ import CommentHeader from '~/components/comments/CommentHeader.vue';
 import { useFormattedDate } from '~/composables/useDate';
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { usePost } from '~/composables/post';
-import { type Comment } from '~/composables/comment'
+import { type Comment } from '~/composables/useComments'
 
 definePageMeta({
     alias: [
