@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import Footer from '~/components/layout/Footer.vue';
 
 import {
@@ -38,11 +39,13 @@ const links = [
     }
 ]
 
-const { fetchPosts, latestPosts } = usePosts()
 
-await fetchPosts()
+const posts = await usePosts()
+
+const latestPosts = computed(() => posts.value?.slice(0, 2))
 
 const config = useSiteConfig()
+
 
 const route = useRoute()
 

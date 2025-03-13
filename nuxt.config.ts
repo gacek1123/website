@@ -16,8 +16,11 @@ export default defineNuxtConfig({
     '@nuxthub/core',
     'nuxt-shiki',
     'nuxt-auth-utils',
-    'nuxt-og-image'
+    'nuxt-og-image',
   ],
+  future: {
+    compatibilityVersion: 4,
+  },
 
   nitro: {
     preset: 'cloudflare-pages',
@@ -32,11 +35,14 @@ export default defineNuxtConfig({
   shiki: {
     bundledThemes: ["vitesse-light", "vitesse-dark"],
   },
+
+
   hub: {
     database: true,
     cache: true,
     kv: true,
   },
+
   build: {
     transpile: ['shiki'],
   },
@@ -119,6 +125,8 @@ export default defineNuxtConfig({
   },
 
   image: {
+    domains: [],
+
     provider: "none",
     providers: {
       cloudflareProvider: {

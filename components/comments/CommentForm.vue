@@ -2,15 +2,12 @@
 import { Button } from '@/components/ui/button'
 
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '../ui/toast'
+import useComment from '~/composables/useComments'
 
 const { loggedIn, openInPopup } = useUserSession()
 
-const { addComment, addReply } = useComments()
-
 const content = ref('')
 
-const postId = usePostId()
 
 const props = defineProps<{
     repliedCommentId?: number
@@ -19,58 +16,13 @@ const props = defineProps<{
 
 const emit = defineEmits(["close"])
 
-const router = useRouter()
-const { toast } = useToast()
+const { useAddReply, useAddComment } = useComment()
+
+const { mutate } = props.repliedCommentId ? useAddReply(props.repliedCommentId) : useAddComment()
 
 
 const onSubmit = async () => {
-    try {
-
-        const { id, repliedCommentId } = props.repliedCommentId ? await addReply(content.value, props.repliedCommentId, postId) : await addComment(content.value, postId)
-
-
-        const { dismiss } = toast({
-            title: 'Success!',
-            description: 'Your comment has been posted.',
-            action: h(Button, {
-                variant: 'outline',
-                size: 'sm',
-                onClick: () => {
-                    const comment = document.querySelector(`#comment-${id}`)
-                    if (comment)
-                        comment.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-
-                    router.push({
-                        query: {
-                            commentId: repliedCommentId ?? id
-                        }
-                    })
-
-
-
-                }
-            }, {
-                default: () => 'Show comment'
-            })
-        })
-        setTimeout(() => {
-
-            dismiss()
-
-            router.push({
-                query: {
-                }
-            })
-        }, 5000)
-
-    } catch (err) {
-        toast({
-            title: 'Uh oh! Something went wrong.',
-            variant: 'destructive',
-            description: 'Unable to add comment.',
-        })
-    }
-
+    mutate({ content: content.value })
 
     emit('close')
     content.value = ''

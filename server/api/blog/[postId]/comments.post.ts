@@ -38,5 +38,5 @@ export default defineEventHandler(async (event) => {
         username: user.name
     }).returning().get()
 
-    return comment
+    return { ...comment, replies: 0 }
 })

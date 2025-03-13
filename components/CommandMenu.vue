@@ -15,7 +15,9 @@ import { useMagicKeys } from '@vueuse/core'
 import { watch, } from 'vue'
 import { pages } from './layout/Navbar.vue'
 
-const { latestPosts } = usePosts()
+const posts = await usePosts()
+
+const latestPosts = computed(() => posts.value?.slice(0, 2))
 
 const open = useState("CommandMenu", () => false)
 

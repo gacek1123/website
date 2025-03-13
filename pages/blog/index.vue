@@ -8,9 +8,9 @@ import {
     PATTERN_BACKGROUND_VARIANT,
 } from "../../components/PatternBackground.vue"
 
-const { fetchPosts } = usePosts()
 
-const { error, status, posts } = await fetchPosts()
+
+const posts = await usePosts()
 
 const searchText = ref("")
 
@@ -20,6 +20,7 @@ const filteredPosts = computed(() => {
         post.title.toLowerCase().includes(searchText.value.toLowerCase())
     )
 })
+
 const description = `Here I share knowledge, experiences and thoughts on topics that fascinate me.`
 
 const route = useRoute()

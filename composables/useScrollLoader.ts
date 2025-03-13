@@ -14,21 +14,22 @@ interface UseScrollLoaderReturn {
 
 export function useScrollLoader(
     fetchMoreData: () => Promise<any>,
-    shouldFetchMore: () => boolean,
+    shouldFetchMore: Ref<boolean>,
     options: UseScrollLoaderOptions = {}
 ): UseScrollLoaderReturn {
     const loadMoreTrigger = ref<HTMLDivElement | null>(null);
     let observer: IntersectionObserver | null = null;
 
     const setupObserver = (target: HTMLDivElement) => {
-        if (!shouldFetchMore()) return;
+        if (!shouldFetchMore.value) return;
 
         observer = new IntersectionObserver(async (entries, obs) => {
-            if (entries[0].isIntersecting) {
+
+            if (entries[0]?.isIntersecting) {
                 await fetchMoreData();
             }
 
-            if (!shouldFetchMore()) {
+            if (!shouldFetchMore.value) {
                 obs.disconnect();
             }
         }, {

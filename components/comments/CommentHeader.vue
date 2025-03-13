@@ -6,11 +6,13 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import useComments from '~/composables/useComments'
+
+const postId = usePostId()
 
 const { commentsCount, order } = useComments()
 
-const postId = usePostId()
-const commentsNumber = commentsCount(postId)
+const commentsNumber = commentsCount()
 
 
 </script>
