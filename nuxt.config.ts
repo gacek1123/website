@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     'nuxt-shiki',
     'nuxt-auth-utils',
     'nuxt-og-image',
+    '@vueuse/nuxt',
   ],
   future: {
     compatibilityVersion: 4,
