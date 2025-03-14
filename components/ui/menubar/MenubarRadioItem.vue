@@ -7,7 +7,7 @@ import {
   type MenubarRadioItemEmits,
   type MenubarRadioItemProps,
   useForwardPropsEmits,
-} from 'radix-vue'
+} from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 
 const props = defineProps<MenubarRadioItemProps & { class?: HTMLAttributes['class'] }>()
@@ -32,7 +32,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   >
     <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <MenubarItemIndicator>
-        <Circle class="h-2 w-2 fill-current" />
+        <Circle class="h-4 w-4 fill-current" />
       </MenubarItemIndicator>
     </span>
     <slot />

@@ -5,7 +5,7 @@ import {
   type MenubarRootEmits,
   type MenubarRootProps,
   useForwardPropsEmits,
-} from 'radix-vue'
+} from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 
 const props = defineProps<MenubarRootProps & { class?: HTMLAttributes['class'] }>()
@@ -25,7 +25,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     v-bind="forwarded"
     :class="
       cn(
-        'flex h-10 items-center gap-x-1 rounded-md border bg-background p-1',
+        'flex h-9 items-center space-x-1 rounded-md border bg-background p-1 shadow-sm',
         props.class,
       )
     "

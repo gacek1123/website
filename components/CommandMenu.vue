@@ -8,7 +8,7 @@ import {
     CommandList,
     CommandSeparator,
 } from '@/components/ui/command'
-import { VisuallyHidden } from 'radix-vue'
+import { VisuallyHidden } from 'reka-ui'
 import { Icon } from '@iconify/vue'
 
 import { useMagicKeys } from '@vueuse/core'

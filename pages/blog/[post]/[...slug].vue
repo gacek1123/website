@@ -5,7 +5,6 @@ import CommentHeader from '~/components/comments/CommentHeader.vue';
 import { useFormattedDate } from '~/composables/useDate';
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { usePost } from '~/composables/post';
-import { type Comment } from '~/composables/useComments'
 
 definePageMeta({
     alias: [
@@ -39,7 +38,7 @@ const {
 await suspense()
 
 
-const { useSortedComments, fetchComments } = await useComments(postId)
+const { useSortedComments, fetchComments } = await useComments()
 
 await fetchComments()
 
