@@ -9,7 +9,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
-    '@nuxtjs/google-fonts',
     '@nuxt/image',
     '@nuxtjs/color-mode',
     '@nuxtjs/seo',
@@ -18,6 +17,8 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     'nuxt-og-image',
     '@vueuse/nuxt',
+    '@nuxt/fonts',
+    '@nuxt/fonts',
   ],
   future: {
     compatibilityVersion: 4,
@@ -117,12 +118,6 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: './components/ui'
-  },
-
-  googleFonts: {
-    families: {
-      Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
-    }
   },
 
   image: {
