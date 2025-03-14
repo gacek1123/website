@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
-
-
-
 const { status, data: song } = useFetch<{
     name: string | null
     isPlaying: boolean,

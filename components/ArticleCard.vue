@@ -25,7 +25,7 @@ const date = useFormattedDate(props.date)
             <div class="transition-colors duration-200">
 
                 <NuxtImg provider="cloudflare-custom" fit="cover" format="webp" :alt="`${title} article image`"
-                    sizes="xs:320px xl:640"
+                    sizes="xs:320px xl:480px"
                     class="h-64 w-full object-cover transition-transform duration-200 group-hover:scale-105"
                     :src="image" :aria-label="`${title} article image`" />
             </div>
